@@ -3,786 +3,925 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GTlish · 把财务一线痛点做成 AI 工具 | AI 应用产品作品集</title>
-<meta name="description" content="财务业务出身的 AI 应用产品实践者。票据 PDF 工具、浏览器扩展、桌面软件、本地化 Agent——五个源自真实工作场景的作品。">
+<title>GTlish · 把财务一线的痛点做成能用的工具 | AI 应用产品作品集</title>
+<meta name="description" content="财务票据岗出身的 AI 应用产品实践者。出纳 SOP、票据 PDF 工具、银行回单排序、浏览器扩展、桌面软件、空分开车 Agent，六个作品都来自真实工作场景。">
+<meta name="theme-color" content="#F7F8FB">
 <style>
 :root{
-  --ink:#0F1B26;
-  --body:#2E3F4C;
-  --muted:#5F7180;
-  --bg:#F5F8FA;
-  --card:#FFFFFF;
-  --line:#D8E2EA;
-  --accent:#0E86C8;
-  --accent-deep:#0A6DA3;
-  --accent-bright:#57C7E3;
-  --accent-soft:#E3F1F9;
-  --night:#0B1826;
-  --night-line:rgba(87,199,227,.14);
-  --mono:"Cascadia Code","JetBrains Mono",Consolas,"Courier New",monospace;
-  --sans:"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --paper:#F7F8FB;
+  --sheet:#FFFFFF;
+  --ink:#16181F;
+  --body:#3A3F4E;
+  --muted:#6B7183;
+  --rule:#DDE1EA;
+  --rule-soft:#ECEFF5;
+  --blue:#3543D0;
+  --blue-deep:#26319E;
+  --blue-soft:#ECEEFC;
+  --marker:#FFE258;
+  --seal:#D63F31;
+  --ok:#1E9A64;
+  --mono:"Cascadia Mono","Cascadia Code",Consolas,"SFMono-Regular",Menlo,monospace;
+  --sans:"Microsoft YaHei UI","Microsoft YaHei","PingFang SC","Noto Sans SC","Segoe UI",sans-serif;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  font-family:var(--sans);background:var(--bg);color:var(--ink);
-  line-height:1.75;font-size:16px;
+  font-family:var(--sans);background:var(--paper);color:var(--ink);
+  font-size:16.5px;line-height:1.8;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  overflow-x:hidden;
 }
-p,dd,li{line-break:strict;text-wrap:pretty;overflow-wrap:break-word}
+p,dd,li,td{line-break:strict;text-wrap:pretty;overflow-wrap:break-word}
 h1,h2,h3{text-wrap:balance}
-a{color:var(--accent);text-decoration:none}
+a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
-::selection{background:var(--accent-bright);color:var(--night)}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:3px}
+::selection{background:var(--marker);color:var(--ink)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+.mono{font-family:var(--mono)}
 
-/* ---------- 导航 ---------- */
-.site-nav{position:absolute;z-index:2;top:0;left:0;right:0}
-.nav-inner{
-  max-width:960px;margin:0 auto;padding:22px 24px;
-  display:flex;justify-content:space-between;align-items:center;
+/* 荧光笔标记：对应 SOP 里的「分色标记法」 */
+.mk{
+  background:linear-gradient(transparent 58%,var(--marker) 58%,var(--marker) 92%,transparent 92%);
+  padding:0 .08em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
 }
-.brand{font-family:var(--mono);font-weight:700;letter-spacing:.08em;color:#E8F2F8;font-size:14px}
-.brand:hover{text-decoration:none;color:var(--accent-bright)}
-.nav-links{display:flex;gap:22px;font-family:var(--mono);font-size:12.5px}
-.nav-links a{color:#9FB4C2;padding:4px 2px}
-.nav-links a:hover{color:var(--accent-bright);text-decoration:none}
+
+/* ---------- 顶栏 ---------- */
+.topbar{border-bottom:1px solid var(--rule);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.14em;color:var(--ink)}
+.brand span{color:var(--blue)}
+.brand:hover{text-decoration:none}
+.toplinks{display:flex;gap:26px;font-size:14.5px}
+.toplinks a{color:var(--body)}
+.toplinks a:hover{color:var(--blue);text-decoration:none}
 
 /* ---------- Hero ---------- */
-.hero{background:var(--night);color:#E8F2F8;position:relative;overflow:hidden}
-.hero::before{
-  content:"";position:absolute;inset:0;
-  background:
-    linear-gradient(var(--night-line) 1px,transparent 1px),
-    linear-gradient(90deg,var(--night-line) 1px,transparent 1px);
-  background-size:56px 56px;
-  mask-image:radial-gradient(ellipse 90% 80% at 50% 0%,#000 40%,transparent 100%);
-  -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 0%,#000 40%,transparent 100%);
-}
-.hero-inner{position:relative;max-width:960px;margin:0 auto;padding:118px 24px 76px}
-.eyebrow{
-  font-family:var(--mono);font-size:13px;letter-spacing:.18em;
-  color:var(--accent-bright);text-transform:uppercase;
-  display:flex;align-items:center;gap:10px;
-}
-.eyebrow::before{content:"";width:28px;height:1px;background:var(--accent-bright);display:inline-block}
-.hero h1{
-  font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.4;
-  margin:22px 0 20px;letter-spacing:.01em;
-}
-.hero h1 em{font-style:normal;color:var(--accent-bright)}
-.hero .sub{color:#A8BCCA;max-width:660px;font-size:16px}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px}
-.chip{
-  font-family:var(--mono);font-size:12.5px;color:#CFE6F0;
-  border:1px solid rgba(87,199,227,.35);border-radius:999px;
-  padding:5px 14px;background:rgba(87,199,227,.07);
-}
-.hero-links{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+.hero{padding:72px 0 84px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.kicker{font-family:var(--mono);font-size:13px;letter-spacing:.16em;color:var(--blue);margin-bottom:22px}
+.hero h1{font-size:clamp(32px,4.6vw,50px);line-height:1.32;font-weight:800;letter-spacing:-.01em}
+.hero .lead{margin-top:24px;color:var(--body);font-size:17.5px;max-width:520px}
+.hero-actions{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
 
-/* ---------- 按钮 ---------- */
 .btn{
   display:inline-flex;align-items:center;gap:8px;
-  padding:11px 24px;border-radius:8px;
-  font-size:15px;font-weight:600;cursor:pointer;
-  transition:transform .15s ease,background .15s ease,
-             border-color .15s ease,box-shadow .15s ease;
+  padding:12px 24px;border-radius:999px;border:1.5px solid var(--ink);
+  font:600 15px/1.2 var(--sans);cursor:pointer;
+  transition:background .15s ease,color .15s ease,transform .15s ease;
 }
 .btn:hover{text-decoration:none;transform:translateY(-1px)}
 .btn:active{transform:translateY(0) scale(.98)}
-.btn-primary{background:var(--accent-bright);color:var(--night);box-shadow:0 2px 10px rgba(87,199,227,.25)}
-.btn-primary:hover{background:#7AD4EA;box-shadow:0 4px 16px rgba(87,199,227,.35)}
-.btn-ghost{border:1px solid rgba(232,242,248,.35);color:#E8F2F8}
-.btn-ghost:hover{border-color:var(--accent-bright);color:var(--accent-bright)}
+.btn-solid{background:var(--ink);color:#fff}
+.btn-solid:hover{background:var(--blue);border-color:var(--blue)}
+.btn-line{background:transparent;color:var(--ink)}
+.btn-line:hover{background:var(--sheet)}
 
-/* ---------- 轨道区 ---------- */
-.track{max-width:1080px;margin:0 auto;padding:88px 32px 48px;position:relative}
-.track-head{margin-bottom:52px}
-.track-head .eyebrow{color:var(--accent)}
-.track-head .eyebrow::before{background:var(--accent)}
-.track-head h2{font-size:31px;margin-top:16px}
-.track-head p{color:var(--muted);margin-top:10px;max-width:620px}
+/* Hero 右侧：一张填好的「凭证」 */
+.voucher{
+  position:relative;background:var(--sheet);border:1px solid var(--rule);border-radius:4px;
+  box-shadow:0 1px 0 var(--rule),0 18px 40px -18px rgba(22,24,31,.18);
+  padding:26px 28px 24px;
+}
+.voucher::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:5px;border-radius:4px 4px 0 0;
+  background:repeating-linear-gradient(90deg,var(--blue) 0 14px,transparent 14px 20px);
+  opacity:.85;
+}
+.v-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding-bottom:14px;border-bottom:1.5px solid var(--ink)}
+.v-title{font-weight:800;font-size:18px;letter-spacing:.3em}
+.v-no{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.v-no b{color:var(--seal);font-weight:600}
+.v-rows{margin-top:4px}
+.v-row{display:grid;grid-template-columns:76px 1fr;gap:14px;padding:11px 0;border-bottom:1px solid var(--rule-soft);font-size:15px}
+.v-row:last-child{border-bottom:none}
+.v-row dt{font-size:13px;color:var(--muted);padding-top:1px}
+.v-row dd{color:var(--ink)}
+.v-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.stamp{
+  display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--seal);border:2.5px solid var(--seal);border-radius:6px;
+  box-shadow:inset 0 0 0 2px var(--sheet),inset 0 0 0 3.5px var(--seal);
+  font-weight:800;letter-spacing:.18em;line-height:1.25;
+  padding:7px 12px 6px 14px;transform:rotate(-7deg);opacity:.92;
+  font-size:15px;white-space:nowrap;user-select:none;
+}
+.stamp small{font-size:9.5px;letter-spacing:.12em;font-weight:600;font-family:var(--mono)}
+.voucher .stamp{position:absolute;right:22px;bottom:20px;font-size:17px}
 
-.cp{display:grid;grid-template-columns:150px 1fr;gap:0 36px;position:relative}
-.cp:not(:last-child){padding-bottom:60px}
-.cp:not(:last-child)::before{display:none}
-.cp-node{display:flex;flex-direction:column;align-items:center;gap:10px;padding-top:2px}
-.cp-id{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.08em}
-.cp-dot{
-  width:14px;height:14px;border-radius:50%;
-  background:var(--card);border:3px solid var(--accent);
-  box-shadow:0 0 0 5px var(--accent-soft);
-}
-.cp-role{font-size:12px;color:var(--muted);text-align:center;line-height:1.5}
+/* ---------- 区块标题 ---------- */
+.sec{padding:80px 0}
+.sec-head{margin-bottom:44px;max-width:680px}
+.sec-head .kicker{margin-bottom:14px}
+.sec-head h2{font-size:clamp(26px,3.2vw,34px);line-height:1.4;font-weight:800}
+.sec-head p{margin-top:12px;color:var(--muted)}
 
-/* ---------- 卡片 ---------- */
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:14px;
-  padding:36px 38px;
-  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+/* ---------- 工作方式 ---------- */
+.method{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--sheet)}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);border-left:1px solid var(--rule)}
+.step{padding:22px 20px 24px;border-right:1px solid var(--rule);position:relative}
+.step .n{font-family:var(--mono);font-size:12.5px;color:var(--blue);letter-spacing:.1em}
+.step h3{font-size:17px;margin:8px 0 6px}
+.step p{font-size:14px;color:var(--body);line-height:1.7}
+
+/* ---------- 作品：票据 ---------- */
+.works{position:relative}
+.ticket{
+  display:grid;grid-template-columns:172px 1fr;
+  background:var(--sheet);border:1px solid var(--rule);border-radius:6px;
+  margin-bottom:40px;position:relative;
+  transition:border-color .18s ease,box-shadow .18s ease;
+  scroll-margin-top:24px;
 }
-.card:hover{
-  transform:translateY(-3px);border-color:var(--accent-bright);
-  box-shadow:0 12px 32px rgba(14,134,200,.10);
+.ticket:hover{border-color:#C6CCDA;box-shadow:0 16px 36px -20px rgba(22,24,31,.22)}
+.stub{
+  position:relative;padding:28px 20px 28px 24px;
+  border-right:2px dashed var(--rule);
+  display:flex;flex-direction:column;gap:6px;
 }
-.card h3{font-size:23px;margin-bottom:8px;letter-spacing:.01em}
-.card .scene{font-size:14px;color:var(--muted);font-family:var(--mono);margin-bottom:22px}
-.card dl{display:grid;gap:14px;margin-bottom:20px}
-.card dt{
-  font-size:12px;font-family:var(--mono);color:var(--accent);
-  letter-spacing:.12em;margin-bottom:3px;
+/* 存根上下的半圆缺口 */
+.stub::before,.stub::after{
+  content:"";position:absolute;right:-12px;width:22px;height:22px;border-radius:50%;
+  background:var(--paper);border:1px solid var(--rule);
 }
-.card dd{font-size:16px;color:var(--body)}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
-.tag{
-  font-family:var(--mono);font-size:12px;color:var(--accent-deep);
-  background:var(--accent-soft);border-radius:5px;padding:3px 10px;
-}
-.card-links{display:flex;gap:20px;flex-wrap:wrap;font-size:14px;align-items:center}
-.card-links a{font-weight:600}
-.card-links .live::before{
+.stub::before{top:-12px;clip-path:inset(50% 0 0 0)}
+.stub::after{bottom:-12px;clip-path:inset(0 0 50% 0)}
+.stub .no{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.08em}
+.stub .num{font-family:var(--mono);font-size:44px;font-weight:700;line-height:1;color:var(--ink);letter-spacing:-.02em}
+.stub .kind{margin-top:10px;font-size:14px;font-weight:700;color:var(--blue)}
+.stub .when{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.stub .stamp{margin-top:auto;align-self:flex-start;font-size:13.5px}
+
+.t-body{padding:30px 36px 32px;min-width:0}
+.t-body h3{font-size:24px;line-height:1.45;font-weight:800}
+.t-scene{margin-top:6px;color:var(--muted);font-size:15px}
+.media{margin-top:22px}
+.video-wrap{aspect-ratio:16/9;background:#12141B;border-radius:6px;overflow:hidden}
+.video-wrap video{width:100%;height:100%;display:block;background:#12141B}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:26px;border-top:1.5px solid var(--ink)}
+.facts > div{padding:14px 18px 4px 0}
+.facts > div + div{padding-left:18px;border-left:1px solid var(--rule)}
+.facts dt{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.06em;margin-bottom:4px}
+.facts dd{font-size:15.5px;color:var(--body);line-height:1.75}
+.facts strong{color:var(--ink)}
+
+.log{margin-top:22px;background:var(--paper);border:1px solid var(--rule-soft);border-radius:6px;padding:16px 20px 14px}
+.log h4{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.log h4::before{content:"";width:9px;height:9px;background:var(--marker);border-radius:2px;display:inline-block}
+.log ul{list-style:none}
+.log li{position:relative;padding-left:16px;font-size:15px;color:var(--body);line-height:1.75;margin:3px 0}
+.log li::before{content:"";position:absolute;left:2px;top:.78em;width:6px;height:1.5px;background:var(--muted)}
+.log li b{color:var(--ink);font-weight:700}
+
+.t-foot{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:16px 24px;flex-wrap:wrap}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:12px;color:var(--body);border:1px solid var(--rule);border-radius:999px;padding:2px 11px;background:var(--sheet)}
+.links{display:flex;gap:20px;flex-wrap:wrap;font-size:15px;font-weight:600}
+.links .live::before{
   content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:#25B36B;margin-right:7px;vertical-align:1px;
-  animation:pulse 2.4s ease-in-out infinite;
+  background:var(--ok);margin-right:7px;vertical-align:2px;
 }
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(37,179,107,.35)}
-  50%{box-shadow:0 0 0 4px rgba(37,179,107,0)}
-}
-.note{font-size:13px;color:var(--muted)}
+.note{font-size:14px;color:var(--muted)}
 
-/* ---------- 视频占位 ---------- */
-.video-slot{
-  aspect-ratio:16/9;border:1.5px dashed var(--line);border-radius:10px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  color:var(--muted);background:var(--bg);margin-bottom:20px;
-  transition:border-color .18s ease;
+/* 回单工具：流程示意 */
+.flow{
+  display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:10px;
+  background:var(--paper);border:1px solid var(--rule-soft);border-radius:6px;padding:22px;
 }
-.card:hover .video-slot{border-color:var(--accent-bright)}
-.video-slot .vs-play{
-  width:46px;height:46px;border-radius:50%;
-  border:1.5px solid var(--accent);color:var(--accent);
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;padding-left:3px;
-}
-.video-slot .vs-label{font-family:var(--mono);font-size:13px;color:var(--accent);letter-spacing:.1em}
-.video-slot .vs-hint{font-size:12px}
-.video-wrap{aspect-ratio:16/9;margin-bottom:20px}
-.video-wrap video{width:100%;height:100%;border-radius:10px;display:block;background:#000}
+.flow .box{background:var(--sheet);border:1px solid var(--rule);border-radius:5px;padding:14px 16px}
+.flow .box h5{font-size:13px;color:var(--blue);letter-spacing:.06em;margin-bottom:6px}
+.flow .box ul{list-style:none;font-size:14px;color:var(--body);line-height:1.7}
+.flow .box li{display:flex;gap:8px;align-items:baseline}
+.flow .arrow{align-self:center;font-family:var(--mono);color:var(--muted);font-size:18px}
+.chip-page{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);border-radius:3px;padding:0 5px;color:var(--muted);flex:none}
+.chip-page.warn{background:var(--marker);border-color:#E9C93A;color:var(--ink)}
 
-/* ---------- SOP 滚动阅读器 ---------- */
-.sop-viewer{
-  border:1px solid var(--line);border-radius:10px;overflow:hidden;
-  margin-bottom:20px;background:var(--card);
+/* SOP 阅读器 */
+.sop{border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:var(--sheet)}
+.sop-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:var(--paper);border-bottom:1px solid var(--rule);scrollbar-width:none}
+.sop-tabs::-webkit-scrollbar{display:none}
+.sop-tabs button{
+  flex:none;font:500 13px/1.3 var(--sans);color:var(--body);
+  background:transparent;border:1px solid transparent;border-radius:999px;padding:6px 12px;cursor:pointer;
 }
-.sop-bar{
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-  padding:10px 18px;background:var(--night);color:#CFE6F0;
-  font-family:var(--mono);font-size:12px;letter-spacing:.06em;
-}
-.sop-bar .sop-scroll-hint{color:#7A93A5;font-size:11.5px;letter-spacing:.02em}
+.sop-tabs button:hover{border-color:var(--rule);background:var(--sheet)}
+.sop-tabs button.on{background:var(--ink);color:#fff}
 .sop-body{
-  max-height:400px;overflow-y:auto;overscroll-behavior:contain;
-  padding:20px 24px 26px;font-size:13.5px;color:var(--body);line-height:1.8;
-  scrollbar-width:thin;scrollbar-color:var(--accent) var(--bg);
+  position:relative;max-height:460px;overflow-y:auto;overscroll-behavior:contain;
+  padding:22px 28px 30px;font-size:14.5px;color:var(--body);line-height:1.8;
+  scrollbar-width:thin;scrollbar-color:#C5CBD8 transparent;
 }
 .sop-body::-webkit-scrollbar{width:8px}
-.sop-body::-webkit-scrollbar-track{background:var(--bg)}
-.sop-body::-webkit-scrollbar-thumb{background:#B9CDD9;border-radius:4px}
-.sop-body::-webkit-scrollbar-thumb:hover{background:var(--accent)}
-.sop-body h4{
-  font-size:14px;color:var(--ink);margin:22px 0 8px;
-  padding-left:10px;border-left:3px solid var(--accent);line-height:1.5;
-}
-.sop-body h4:first-child{margin-top:0}
-.sop-body h5{font-size:13px;color:var(--accent-deep);margin:12px 0 4px}
-.sop-body ul{padding-left:20px;margin:4px 0 12px}
-.sop-body li{margin-bottom:3px}
-.sop-body .sop-note{
-  margin-top:18px;padding:12px 16px;background:var(--accent-soft);
-  border-radius:8px;font-size:12.5px;color:#3E5666;
-}
+.sop-body::-webkit-scrollbar-thumb{background:#C5CBD8;border-radius:4px}
+.sop-body h2{font-size:17px;color:var(--ink);margin:30px 0 10px;padding-bottom:6px;border-bottom:1.5px solid var(--ink);scroll-margin-top:8px}
+.sop-body h2:first-of-type{margin-top:22px}
+.sop-body h3{font-size:15px;color:var(--ink);margin:18px 0 6px}
+.sop-body h3::before{content:"";display:inline-block;width:4px;height:14px;background:var(--blue);margin-right:8px;vertical-align:-1px;border-radius:1px}
+.sop-body p{margin:6px 0}
+.sop-body ul,.sop-body ol{padding-left:22px;margin:4px 0 10px}
+.sop-body li{margin:2px 0}
+.sop-body strong{color:var(--ink)}
+.sop-body em{font-style:normal;color:var(--muted)}
+.sop-body blockquote{margin:10px 0;padding:8px 14px;border-left:3px solid var(--marker);background:#FFFBE6;color:#4A4630;font-size:14px}
+.sop-body .tbl{overflow-x:auto;margin:10px 0 14px}
+.sop-body table{border-collapse:collapse;width:100%;min-width:480px;font-size:13.5px}
+.sop-body th,.sop-body td{border:1px solid var(--rule);padding:6px 10px;text-align:left;vertical-align:top}
+.sop-body th{background:var(--paper);color:var(--ink);font-weight:700;white-space:nowrap}
+.sop-body .ok{color:var(--ok);font-weight:700}
+.sop-body .no{color:var(--seal);font-weight:700}
 
-/* ---------- 方法 ---------- */
-.method{max-width:960px;margin:0 auto;padding:8px 24px 76px}
-.method-box{
-  border-left:3px solid var(--accent);background:var(--accent-soft);
-  border-radius:0 10px 10px 0;padding:22px 28px;
-  font-size:15px;color:#26404F;
-}
-.method-box strong{color:var(--accent-deep)}
+/* ---------- 经历 ---------- */
+.cv{display:grid;grid-template-columns:1.25fr .75fr;gap:56px}
+.timeline{list-style:none;border-left:1.5px solid var(--ink)}
+.timeline li{position:relative;padding:0 0 28px 26px}
+.timeline li:last-child{padding-bottom:0}
+.timeline li::before{content:"";position:absolute;left:-6px;top:9px;width:10px;height:10px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.timeline li.now::before{background:var(--marker);border-color:var(--ink)}
+.timeline .d{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.timeline h3{font-size:17.5px;margin:2px 0 4px}
+.timeline p{font-size:15px;color:var(--body)}
+.skills dl{border-top:1.5px solid var(--ink)}
+.skills dl > div{padding:13px 0;border-bottom:1px solid var(--rule)}
+.skills dt{font-size:13px;font-weight:700;color:var(--blue);letter-spacing:.06em}
+.skills dd{font-size:15px;color:var(--body);margin-top:2px}
 
 /* ---------- 联系 ---------- */
-.contact{background:var(--night);color:#E8F2F8}
-.contact-inner{max-width:960px;margin:0 auto;padding:68px 24px 58px}
-.contact h2{font-size:25px;margin-bottom:12px}
-.contact p{color:#A8BCCA;max-width:560px}
-.contact-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
-footer{
-  background:var(--night);color:#5A7484;
-  font-family:var(--mono);font-size:12px;
-  text-align:center;padding:0 24px 34px;
-}
-footer .rule{border-top:1px solid rgba(87,199,227,.12);max-width:960px;margin:0 auto 24px}
-footer a{color:#7A93A5}
-footer a:hover{color:var(--accent-bright)}
-
-/* ---------- 响应式 ---------- */
-@media (max-width:680px){
-  body{font-size:15.5px}
-  .nav-links{gap:16px}
-  .hero-inner{padding:104px 20px 64px}
-  .cp{grid-template-columns:1fr;gap:14px}
-  .cp::before{display:none!important}
-  .cp-node{flex-direction:row;justify-content:flex-start;gap:12px}
-  .cp-role{text-align:left}
-  .card{padding:24px 20px}
-  .sop-body{max-height:340px;padding:16px 18px 22px}
-  .sop-bar .sop-scroll-hint{display:none}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  .card,.btn,.video-slot{transition:none}
-  .card:hover,.btn:hover,.btn:active{transform:none}
-  .card-links .live::before{animation:none}
-}
+.contact{border-top:1px solid var(--rule);background:var(--sheet)}
+.contact .wrap{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.contact h2{font-size:clamp(24px,3vw,32px);font-weight:800;line-height:1.4}
+.contact p{color:var(--muted);margin-top:8px}
+.contact-row{display:flex;gap:12px;flex-wrap:wrap}
+.copy-email{font-family:var(--mono);font-weight:600}
+.copy-email.is-copied{background:var(--ok);border-color:var(--ok)}
+footer{padding:26px 0 34px;font-size:13px;color:var(--muted);background:var(--sheet)}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:22px}
+footer a{color:var(--muted)}
 
 /* ---------- 左侧目录轴 ---------- */
 .side-nav{
-  position:fixed;
-  left:max(24px,calc(50vw - 560px));
-  top:50%;
-  transform:translateY(-50%);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  z-index:20;
-  opacity:0;
-  transition:opacity .35s ease;
-  pointer-events:none;
+  position:fixed;left:max(20px,calc(50vw - 640px));top:50%;transform:translateY(-50%);
+  z-index:20;opacity:0;pointer-events:none;transition:opacity .3s ease;
 }
 .side-nav.snav-show{opacity:1;pointer-events:auto}
-.snav-track{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:52px;
-  padding:10px 0;
-}
-.snav-track::before{
-  content:"";
-  position:absolute;
-  top:12px;bottom:12px;
-  left:50%;
-  width:2px;
-  background:var(--line);
-  transform:translateX(-50%);
-}
-.snav-item{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:56px;height:56px;
-  text-decoration:none;
-  cursor:pointer;
-  z-index:1;
-}
+.snav-track{position:relative;display:flex;flex-direction:column;gap:26px;padding:6px 0}
+.snav-track::before{content:"";position:absolute;top:18px;bottom:18px;left:17px;border-left:2px dashed var(--rule)}
+.snav-item{position:relative;display:flex;align-items:center;width:36px;height:36px;justify-content:center;z-index:1}
+.snav-item:hover{text-decoration:none}
 .snav-dot{
-  width:22px;height:22px;
-  border-radius:50%;
-  border:2.5px solid var(--line);
-  background:var(--bg);
-  transition:border-color .22s,background .22s,transform .22s,box-shadow .22s;
+  width:30px;height:30px;border-radius:50%;
+  border:1.5px solid var(--rule);background:var(--sheet);
+  font:600 11.5px/27px var(--mono);text-align:center;color:var(--muted);
+  transition:background .2s,border-color .2s,color .2s,transform .2s;
 }
-.snav-item:hover .snav-dot{
-  border-color:var(--accent-deep);
-}
-.snav-item.snav-active .snav-dot{
-  border-color:var(--accent);
-  background:var(--accent);
-  transform:scale(1.4);
-  box-shadow:0 0 0 7px var(--accent-soft);
-}
+.snav-item:hover .snav-dot{border-color:var(--ink);color:var(--ink)}
+.snav-item.snav-active .snav-dot{background:var(--ink);border-color:var(--ink);color:#fff;transform:scale(1.12);box-shadow:0 0 0 4px var(--marker)}
 .snav-lbl{
-  position:absolute;
-  left:calc(100% + 16px);
-  white-space:nowrap;
-  font-family:var(--mono);
-  font-size:13px;
-  letter-spacing:.05em;
-  color:var(--muted);
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:6px;
-  padding:6px 14px;
-  opacity:0;
-  transform:translateX(-8px);
-  transition:opacity .18s,transform .18s,color .18s,border-color .18s;
-  pointer-events:none;
+  position:absolute;left:calc(100% + 12px);white-space:nowrap;
+  font-size:13px;color:var(--body);background:var(--sheet);
+  border:1px solid var(--rule);border-radius:999px;padding:4px 12px;
+  opacity:0;transform:translateX(-6px);pointer-events:none;
+  transition:opacity .18s,transform .18s;
 }
-.snav-item:hover .snav-lbl,
-.snav-item.snav-active .snav-lbl{
-  opacity:1;
-  transform:translateX(0);
+.snav-item:hover .snav-lbl,.snav-item.snav-active .snav-lbl{opacity:1;transform:translateX(0)}
+.snav-item.snav-active .snav-lbl{color:var(--ink);border-color:var(--ink);font-weight:600}
+@media (max-width:1400px){.side-nav{display:none}}
+
+/* ---------- 响应式 ---------- */
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;gap:44px}
+  .steps{grid-template-columns:1fr 1fr}
+  .step{border-bottom:1px solid var(--rule)}
+  .cv{grid-template-columns:1fr;gap:44px}
+  .facts{grid-template-columns:1fr}
+  .facts > div + div{padding-left:0;border-left:none;border-top:1px solid var(--rule)}
+  .flow{grid-template-columns:1fr}
+  .flow .arrow{transform:rotate(90deg);justify-self:center}
 }
-.snav-item.snav-active .snav-lbl{
-  color:var(--accent);
-  border-color:rgba(87,199,227,.45);
+@media (max-width:680px){
+  body{font-size:16px}
+  .wrap{padding:0 18px}
+  .toplinks{gap:16px;font-size:14px}
+  .toplinks .hide-sm{display:none}
+  .hero{padding:48px 0 60px}
+  .voucher{padding:22px 18px 20px}
+  .v-row{grid-template-columns:64px 1fr;gap:10px;font-size:14.5px}
+  .voucher .stamp{position:static;margin-top:14px;transform:rotate(-4deg)}
+  .v-foot{flex-direction:column;align-items:flex-start;gap:6px}
+  .sec{padding:60px 0}
+  .steps{grid-template-columns:1fr}
+  .ticket{grid-template-columns:1fr}
+  .stub{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 14px;padding:18px 18px 16px;border-right:none;border-bottom:2px dashed var(--rule)}
+  .stub::before,.stub::after{top:auto;bottom:-12px;right:auto;clip-path:inset(0 0 0 50%)}
+  .stub::before{left:-12px;clip-path:inset(0 0 0 50%)}
+  .stub::after{right:-12px;left:auto;clip-path:inset(0 50% 0 0)}
+  .stub .num{font-size:30px}
+  .stub .kind{margin-top:0}
+  .stub .stamp{margin:0 0 0 auto}
+  .t-body{padding:22px 18px 24px}
+  .t-body h3{font-size:21px}
+  .sop-body{max-height:380px;padding:16px 16px 22px}
 }
-@media(max-width:1200px){.side-nav{display:none}}
-@media(prefers-reduced-motion:reduce){.side-nav,.snav-lbl,.snav-dot{transition:none}}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.ticket,.snav-dot,.snav-lbl,.side-nav{transition:none}
+  .btn:hover,.btn:active{transform:none}
+}
 </style>
 </head>
-<body>
+<body id="top">
 
-<!-- ================= HERO ================= -->
-<header class="hero">
-  <nav class="site-nav" aria-label="页面导航">
-    <div class="nav-inner">
-      <a class="brand" href="#top">GTLISH / PORTFOLIO</a>
-      <div class="nav-links">
-        <a href="#track">项目</a>
-        <a href="#method">方法</a>
-        <a href="#contact">联系</a>
-      </div>
-    </div>
-  </nav>
-  <div class="hero-inner" id="top">
-    <p class="eyebrow">GTLISH.COM / AI PRODUCT PORTFOLIO</p>
-    <h1>把财务一线的真实痛点，<br>做成<em>能用的 AI 工具</em></h1>
-    <p class="sub">
-      211 信息管理本科，财务处票据岗出身。<br>
-      五个作品全部源自我经手的真实业务场景：<br>
-      需求定义、产品设计、验收与部署由我负责，AI 编程工具加速实现。
-    </p>
-    <div class="chips">
-      <span class="chip">5 个可演示作品</span>
-      <span class="chip">2 个公网站点</span>
-      <span class="chip">1 个本地化 Agent</span>
-      <span class="chip">目标：AI 应用 / B 端产品经理</span>
-    </div>
-    <div class="hero-links">
-      <a class="btn btn-primary" href="#track">查看作品轨道</a>
-      <a class="btn btn-ghost" href="#contact">联系我</a>
-    </div>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">GTLISH<span>.</span>COM</a>
+    <nav class="toplinks" aria-label="页面导航">
+      <a href="#works">作品</a>
+      <a class="hide-sm" href="#method">方法</a>
+      <a href="#cv">经历</a>
+      <a href="#contact">联系</a>
+    </nav>
   </div>
 </header>
 
-<!-- ================= 作品轨道 ================= -->
-<main class="track" id="track">
-  <div class="track-head">
-    <p class="eyebrow">CHECKPOINT TRACK</p>
-    <h2>五个卡点，从业务根基到 AI 产品</h2>
-    <p>借用我在 Agent 项目里设计的「卡点确认」概念：<br>每个作品是一次确认过的推进，顺序即成长路径。</p>
+<!-- ================= Hero ================= -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker">AI 应用产品 · 作品集</p>
+      <h1>把财务一线的痛点，<br>做成<span class="mk">每天都在用的工具</span></h1>
+      <p class="lead">
+        我做过化工集团财务处的开票与银行承兑岗，也在空分车间中控室值过班。
+        这里的六个作品，需求都来自我亲手做过的工作：我负责定义问题、设计方案、测试和上线，代码借助 AI 编程工具完成。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#works">看作品</a>
+        <button class="btn btn-line copy-email" type="button" data-email="gtl111222@126.com" aria-label="复制邮箱地址 gtl111222@126.com">复制邮箱</button>
+      </div>
+    </div>
+
+    <div class="voucher" aria-label="个人概况">
+      <div class="v-head">
+        <span class="v-title">个人概况</span>
+        <span class="v-no">No. <b>GTL-2026-11</b></span>
+      </div>
+      <dl class="v-rows">
+        <div class="v-row"><dt>教育</dt><dd>合肥工业大学（211）· 信息管理与信息系统本科</dd></div>
+        <div class="v-row"><dt>经历</dt><dd>财务处开票 / 银行承兑岗<br>空分车间中控室操作员</dd></div>
+        <div class="v-row"><dt>作品</dt><dd>6 个：2 个在线可用，3 个本地工具，1 份脱敏 SOP</dd></div>
+        <div class="v-row"><dt>擅长</dt><dd>业务流程梳理、需求拆解、AI 辅助开发、测试与部署</dd></div>
+        <div class="v-row"><dt>求职</dt><dd>AI 应用产品经理 / B 端工具产品经理</dd></div>
+      </dl>
+      <div class="v-foot"><span>gtl111222@126.com</span></div>
+      <span class="stamp" aria-hidden="true">开放机会<small>OPEN TO WORK</small></span>
+    </div>
   </div>
-
-  <!-- 作品目录轴 -->
-  <nav class="side-nav" id="sideNav" aria-label="项目目录">
-    <div class="snav-track">
-      <a class="snav-item" href="#cp01"><span class="snav-dot"></span><span class="snav-lbl">CP-01 · SOP</span></a>
-      <a class="snav-item" href="#cp02"><span class="snav-dot"></span><span class="snav-lbl">CP-02 · PDF 工具</span></a>
-      <a class="snav-item" href="#cp03"><span class="snav-dot"></span><span class="snav-lbl">CP-03 · AutoClick</span></a>
-      <a class="snav-item" href="#cp04"><span class="snav-dot"></span><span class="snav-lbl">CP-04 · 键盘发音</span></a>
-      <a class="snav-item" href="#cp05"><span class="snav-dot"></span><span class="snav-lbl">CP-05 · 空分 Agent</span></a>
-    </div>
-  </nav>
-
-  <!-- CP-01 SOP -->
-  <section class="cp" id="cp01">
-    <div class="cp-node">
-      <span class="cp-id">CP-01</span>
-      <span class="cp-dot" aria-hidden="true"></span>
-      <span class="cp-role">业务根基</span>
-    </div>
-    <article class="card">
-      <h3>出纳承兑业务 SOP（脱敏版）</h3>
-      <p class="scene">场景：银行承兑汇票全流程 · 收票 / 匹配 / 销号 / 背书</p>
-
-      <div class="sop-viewer">
-        <div class="sop-bar">
-          <span>SOP · 出纳承兑业务 · 脱敏版 · 12 章</span>
-          <span class="sop-scroll-hint">↕ 上下滚动阅读</span>
-        </div>
-        <div class="sop-body" tabindex="0" aria-label="出纳承兑业务 SOP 全文，可滚动阅读">
-          <h4>一、收款资料整理</h4>
-          <h5>1. 打印收款收据</h5>
-          <ul>
-            <li>在 ERP 系统中查询指定日期的承兑收款记录，按相关单位及结算方式筛选。</li>
-            <li>查询结果按付款单位排序，按统一格式打印收款收据。</li>
-            <li>打印后检查单位、金额、日期及结算方式是否一致。</li>
-          </ul>
-          <h5>2. 打印收入汇票资料</h5>
-          <ul>
-            <li>查询前一工作日或节假日前后收到的应收票据。</li>
-            <li>按内部管理口径区分金额区间和到期时间。</li>
-            <li>核对收票日期、到期日期、票据金额等关键信息，按统一模板打印票据正背面。</li>
-          </ul>
-          <h5>3. 整理收入汇票</h5>
-          <ul>
-            <li>不同金额区间的汇票分别整理：较大金额按金额排序，较小金额按到账或到期时间排序。</li>
-            <li>确保纸质资料与系统票据信息对应一致。</li>
-          </ul>
-
-          <h4>二、付款申请与汇票匹配</h4>
-          <h5>4. 付款申请单审核及汇票匹配</h5>
-          <ul>
-            <li>区分总部与分部业务，检查申请单审批及用印是否完整。</li>
-            <li>核对申请金额、欠款、预付款、发货等信息；余额异常、依据不充分或审批不完整的暂不办理。</li>
-            <li>根据付款金额、票据到期时间、流转情况及内部标准匹配汇票。</li>
-            <li>较小金额申请优先匹配相应金额区间票据；较大金额申请匹配信用状况较好的票据。</li>
-            <li>避免使用流转次数过多、金额过于零散或存在风险特征的票据。</li>
-            <li>涉及拆分使用时，计算票据使用金额及剩余金额并在资料中记录。</li>
-          </ul>
-
-          <h4>三、票据备查簿管理</h4>
-          <h5>5. 票据销号及拆分登记</h5>
-          <ul>
-            <li>在备查簿中筛选待使用票据，通过票据号码核对电子票据与备查簿记录。</li>
-            <li>已使用票据按内部标识规则销号，记录被背书人及办理日期。</li>
-            <li>票据拆分时新增拆分记录，核对「使用金额＋剩余金额＝票面金额」。</li>
-            <li>同一票据号码下可能存在多笔不同金额记录，应逐笔核对。</li>
-            <li>对已预选用于付款的票据设置内部标识，避免重复使用。</li>
-          </ul>
-
-          <h4>四、电子票据背书</h4>
-          <h5>6. 票据签收与背书申请</h5>
-          <ul>
-            <li>登录票据系统查询待签收票据，按票据来源选择签收方式，提交后由复核人员复核。</li>
-            <li>按票据号码、日期、金额等条件查询待背书票据，核对票据号码、金额及付款申请单。</li>
-            <li>从被背书人名册中选择对应收款单位；名称、开户银行、账号与申请资料不一致时暂不办理。</li>
-            <li>背书金额应与汇票实际使用金额一致；发现错误应撤销原申请重新提交。</li>
-            <li>完成申请后按规定履行签字及复核手续。</li>
-          </ul>
-
-          <h4>五、付款结果及拆分票据处理</h4>
-          <h5>7. 导出付款结果</h5>
-          <ul>
-            <li>查询当日背书申请及复核结果，导出付款结果用于编制支出明细。</li>
-            <li>保留票据号码、出票日期、到期日期、票据金额、被背书人、交易结果。</li>
-            <li>排除失败或状态异常记录，按收款单位排序，与付款申请单逐笔核对。</li>
-          </ul>
-          <h5>8. 打印拆分票据资料</h5>
-          <ul>
-            <li>单张汇票直接与申请单核对；多张或拆分汇票按拆分明细核对。</li>
-            <li>按内部档案要求双面打印并整理。</li>
-          </ul>
-          <h5>9. 替换申请单所附票据</h5>
-          <ul>
-            <li>区分整票支付和拆分支付，拆分票据按档案规则折叠标识。</li>
-            <li>将原申请单所附票据资料替换为最终使用的拆分票据资料，原整票资料同步作已处理标识。</li>
-          </ul>
-
-          <h4>六、结算复核与确认</h4>
-          <h5>10. 结算办理</h5>
-          <ul>
-            <li>按承兑类型及所属单位筛选待办理业务，批量办理前核对申请单、票据及收款单位信息。</li>
-            <li>核对付款单位、收款单位、票据号码、背书金额、交易状态。</li>
-            <li>确认复核金额与银行处理结果一致后完成结算确认；失败或退回业务单独登记跟进。</li>
-          </ul>
-
-          <h4>七、会计凭证处理</h4>
-          <h5>11. 凭证制单</h5>
-          <ul>
-            <li>申请单按经办人及单据数量分类，区分代采、总部、分部及其他项目。</li>
-            <li>凭证日期采用申请单最终审批日期；摘要统一为「银行承兑汇票转让＋业务类型」。</li>
-            <li>票据类业务使用 [应付票据科目]；往来单位、摘要和金额与申请资料保持一致。</li>
-            <li>按业务性质选择现金流量代码（[代码A]—[代码E]）。</li>
-            <li>代扣气款、电费等业务使用 [往来科目]，对单价、数量及结算金额进行合理性复核。</li>
-          </ul>
-
-          <h4>八、凭证打印与归档</h4>
-          <ul>
-            <li>按总部/分部、会计期间及凭证类型筛选打印范围，统一纸张、方向和单面格式。</li>
-            <li>打印后检查缺页、重页或凭证号不连续等情况。</li>
-            <li>凭证按票据号码顺序整理，每张凭证后依次附对应付款申请单，按会计档案要求归档。</li>
-          </ul>
-
-          <h4>九、其他票据业务</h4>
-          <ul>
-            <li>收入票据下载：下载票据明细与 ERP 收款记录核对，异常票据单独跟进。</li>
-            <li>票据贴现：核对金额、到期日、贴现利率及成本，完成背书申请与资料上传，贴现后核对到账金额和手续费。</li>
-            <li>ERP 支付申请：核对付款及收款单位、金额、结算方式、账号、摘要；电汇与承兑分别整理提交。</li>
-          </ul>
-
-          <h4>十、当日付款汇总</h4>
-          <ul>
-            <li>汇总当日全部付款申请，区分承兑付款和电汇付款，合并同一收款单位多笔业务。</li>
-            <li>汇报格式：今日付款合计 ×× 万元，其中银行承兑 ×× 万元、电汇 ×× 万元。</li>
-            <li>明细表合计数与银行结果、ERP 付款记录及申请单总额交叉核对。</li>
-          </ul>
-
-          <h4>十一、代扣及资料流转</h4>
-          <ul>
-            <li>代扣资料应包含业务依据、金额计算过程及必要审批记录。</li>
-            <li>账号信息仅用于业务核对，不在公开版 SOP 中展示。</li>
-            <li>申请单按经办人、业务日期及所属单位分类，完成签字、审批及用印检查后分别归档。</li>
-          </ul>
-
-          <h4>十二、关键控制点</h4>
-          <ul>
-            <li><strong>信息一致性</strong>：申请单、ERP、银行票据系统及会计凭证中的单位、金额、账号、票据号码保持一致。</li>
-            <li><strong>票据状态检查</strong>：办理前确认票据处于可签收、可背书或可贴现状态。</li>
-            <li><strong>权限分离</strong>：申请、复核、确认及凭证处理按岗位权限分别完成。</li>
-            <li><strong>拆分金额核对</strong>：已使用金额与剩余金额之和必须等于票面金额。</li>
-            <li><strong>异常业务管理</strong>：余额异常、资料不全、信息不一致、交易失败或审批不完整的业务暂停办理。</li>
-            <li><strong>防止重复支付</strong>：备查簿销号、系统状态检查及纸质标识三重防线。</li>
-            <li><strong>账实核对</strong>：每日核对银行结果、ERP 记录、支出明细表及会计凭证。</li>
-            <li><strong>档案完整性</strong>：凭证、申请单、票据资料、审批附件及银行结果完整归档。</li>
-          </ul>
-
-          <div class="sop-note">
-            脱敏说明：人名、单位、银行、账号、科目编号、现金流量代码均已替换为占位符；
-            精确金额阈值、系统菜单路径及内部判断标准已模糊化处理。
-          </div>
-        </div>
-      </div>
-
-      <dl>
-        <div><dt>痛点</dt><dd>承兑汇票业务流程长、口径多、风险点分散，交接依赖口口相传，新人上手慢且容易出错。</dd></div>
-        <div><dt>我做了什么</dt><dd>把收款整理、付款匹配、备查簿销号、电子票据背书的完整流程结构化为标准作业文档，并沉淀出一套「用 AI 整理业务知识」的协作流程。</dd></div>
-        <div><dt>产品视角</dt><dd>这份 SOP 是后面所有工具的需求来源——先把业务讲清楚，再决定做什么工具。</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="tag">业务梳理</span><span class="tag">SOP 设计</span><span class="tag">AI 协作流程</span>
-      </div>
-    </article>
-  </section>
-
-  <!-- CP-02 票据工具 -->
-  <section class="cp" id="cp02">
-    <div class="cp-node">
-      <span class="cp-id">CP-02</span>
-      <span class="cp-dot" aria-hidden="true"></span>
-      <span class="cp-role">第一个上线工具</span>
-    </div>
-    <article class="card">
-      <h3>票据 PDF 处理工具</h3>
-      <p class="scene">场景：汇票资料打印前的插页与排序，手工操作费时易错</p>
-
-      <div class="video-wrap">
-        <video controls preload="metadata" playsinline aria-label="票据 PDF 处理工具演示视频">
-          <source src="videos/PDFtool.mp4" type="video/mp4">
-          当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
-        </video>
-      </div>
-
-      <dl>
-        <div><dt>功能</dt><dd>奇数页汇票自动插入空白页并合并导出；支持按到期日、按金额排序，一次处理整批票据。</dd></div>
-        <div><dt>产品决策</dt><dd>坚持浏览器本地处理——票据文件不上传任何服务器，打消财务场景最大的合规顾虑。</dd></div>
-        <div><dt>技术与部署</dt><dd>从 Coze 原型迁移至 GitHub 仓库，Vite 构建静态站，腾讯云 EdgeOne Pages 部署，自定义域名 + HTTPS + 国内可用性验证。</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="tag">纯前端</span><span class="tag">数据不出本机</span><span class="tag">EdgeOne Pages</span><span class="tag">自定义域名</span>
-      </div>
-      <div class="card-links">
-        <a class="live" href="https://hy.gtlish.com/" target="_blank" rel="noopener">在线使用 hy.gtlish.com</a>
-        <a href="https://github.com/GTlilith/pdf-tools" target="_blank" rel="noopener">GitHub 仓库</a>
-      </div>
-    </article>
-  </section>
-
-  <!-- CP-03 AutoClick -->
-  <section class="cp" id="cp03">
-    <div class="cp-node">
-      <span class="cp-id">CP-03</span>
-      <span class="cp-dot" aria-hidden="true"></span>
-      <span class="cp-role">浏览器扩展</span>
-    </div>
-    <article class="card">
-      <h3>AutoClick 自动点击扩展</h3>
-      <p class="scene">场景：网页上重复、机械的点击操作</p>
-
-      <div class="video-wrap">
-        <video controls preload="metadata" playsinline aria-label="AutoClick 自动点击扩展演示视频">
-          <source src="videos/autoclick.mp4" type="video/mp4">
-          当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
-        </video>
-      </div>
-
-      <dl>
-        <div><dt>功能</dt><dd>选定页面元素后按设定间隔自动点击，配置与运行状态本地保存，按需启用不常驻。</dd></div>
-        <div><dt>体验细节</dt><dd>支持同源 iframe 内框选目标；页面整页刷新后自动恢复任务、倒计时与点击统计。</dd></div>
-        <div><dt>技术与部署</dt><dd>Edge Manifest V3 扩展，无后端、无构建流程；GitHub Pages 提供安装说明页与 ZIP 安装包。</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="tag">Manifest V3</span><span class="tag">chrome.storage</span><span class="tag">GitHub Pages</span>
-      </div>
-      <div class="card-links">
-        <a class="live" href="https://gtlilith.github.io/autoclick/" target="_blank" rel="noopener">安装页面</a>
-        <a href="https://github.com/GTlilith/autoclick" target="_blank" rel="noopener">GitHub 仓库</a>
-      </div>
-    </article>
-  </section>
-
-  <!-- CP-04 键盘发音 -->
-  <section class="cp" id="cp04">
-    <div class="cp-node">
-      <span class="cp-id">CP-04</span>
-      <span class="cp-dot" aria-hidden="true"></span>
-      <span class="cp-role">桌面软件</span>
-    </div>
-    <article class="card">
-      <h3>键盘发音 · 数字录入语音反馈软件</h3>
-      <p class="scene">场景：财务人员习惯计算器按键发音，电脑盲打数字缺少声音反馈</p>
-
-      <div class="video-wrap">
-        <video controls preload="metadata" playsinline aria-label="键盘数字发音软件演示视频">
-          <source src="videos/keyboardsound.mp4" type="video/mp4">
-          当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
-        </video>
-      </div>
-
-      <dl>
-        <div><dt>功能</dt><dd>敲击小键盘 0–9、小数点、退格时播放计算器风格中文女声报数；托盘常驻，小窗实时显示按键。</dd></div>
-        <div><dt>产品迭代</dt><dd>音色经过三轮试听迭代（系统 TTS → 童音 → 机械感中音女声），最终贴合「计算器发音」的肌肉记忆。</dd></div>
-        <div><dt>技术与分发</dt><dd>Electron 全局键盘监听；语音预生成为本地音频，运行离线可用；整个文件夹可 U 盘拷贝给同事直接使用。</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="tag">Electron</span><span class="tag">离线可用</span><span class="tag">便携分发</span>
-      </div>
-      <div class="card-links">
-        <span class="note">桌面软件，暂无公网链接，以视频演示为准</span>
-      </div>
-    </article>
-  </section>
-
-  <!-- CP-05 空分 Agent -->
-  <section class="cp" id="cp05">
-    <div class="cp-node">
-      <span class="cp-id">CP-05</span>
-      <span class="cp-dot" aria-hidden="true"></span>
-      <span class="cp-role">AI Agent</span>
-    </div>
-    <article class="card">
-      <h3>空分开车智能领航员 Agent（本地化重做）</h3>
-      <p class="scene">场景：空分装置开车指导 · 学习性项目，不用于真实生产</p>
-
-      <div class="video-wrap">
-        <video controls preload="metadata" playsinline aria-label="空分开车智能领航员演示视频">
-          <source src="videos/KFagent.mp4" type="video/mp4">
-          当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
-        </video>
-      </div>
-
-      <dl>
-        <div><dt>核心设计</dt><dd>确定性状态机推进流程，<strong>模型无权越过卡点</strong>：关键节点必须人工确认才能推进；出现异常先阻断、匹配事故经验库；知识库外的问题明确拒答，不编造参数。</dd></div>
-        <div><dt>知识工程</dt><dd>将开车规程与事故案例结构化为 6 大步骤、26 项卡点、32 张事故卡片，中文检索匹配历史教训。</dd></div>
-        <div><dt>技术与质量</dt><dd>从 Coze 平台迁移为本地 TypeScript 代码化实现，零运行时依赖，11 项自动化测试覆盖推进、阻断、拒答等关键行为。</dd></div>
-      </dl>
-      <div class="tags">
-        <span class="tag">TypeScript</span><span class="tag">状态机</span><span class="tag">知识库检索</span><span class="tag">AI 安全边界</span>
-      </div>
-      <div class="card-links">
-        <span class="note">本地运行项目，以视频演示为准</span>
-      </div>
-    </article>
-  </section>
-</main>
+</section>
 
 <!-- ================= 方法 ================= -->
 <section class="method" id="method">
-  <div class="method-box">
-    <strong>我的工作方式：</strong>不从技术出发找场景，而是从亲历的业务痛点出发定义需求，
-    使用 AI 编程工具加速实现，自己负责产品设计、边界决策和验收——这五个作品都是这么做出来的。
+  <div class="wrap sec">
+    <div class="sec-head">
+      <p class="kicker">工作方式</p>
+      <h2>先把业务讲清楚，再决定做什么工具</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">STEP 1</span><h3>亲历痛点</h3><p>从自己每天重复、容易出错的环节找问题，比如几十张汇票手工排序。</p></div>
+      <div class="step"><span class="n">STEP 2</span><h3>写清流程</h3><p>先把岗位流程写成 SOP，标出校验点和风险点，工具需求从这里来。</p></div>
+      <div class="step"><span class="n">STEP 3</span><h3>拆成小工具</h3><p>一个场景一个工具，先定边界：数据不出本机、识别不到就标出来。</p></div>
+      <div class="step"><span class="n">STEP 4</span><h3>AI 辅助实现</h3><p>用 AI 编程工具写代码，我负责方案取舍、验收和自动化测试用例。</p></div>
+      <div class="step"><span class="n">STEP 5</span><h3>上线后迭代</h3><p>放到真实工作里用，按同事反馈和打印、浏览器等实际问题继续修。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 作品 ================= -->
+<main class="works sec" id="works">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">作品 · 按做出来的顺序排列</p>
+      <h2>六个作品，从一份 SOP 开始</h2>
+      <p>每张卡片左侧是存根：编号、类型、时间和当前状态。</p>
+    </div>
+
+    <nav class="side-nav" id="sideNav" aria-label="作品目录">
+      <div class="snav-track">
+        <a class="snav-item" href="#p1"><span class="snav-dot">01</span><span class="snav-lbl">出纳 SOP</span></a>
+        <a class="snav-item" href="#p2"><span class="snav-dot">02</span><span class="snav-lbl">票据 PDF 工具</span></a>
+        <a class="snav-item" href="#p3"><span class="snav-dot">03</span><span class="snav-lbl">回单排序工具</span></a>
+        <a class="snav-item" href="#p4"><span class="snav-dot">04</span><span class="snav-lbl">AutoClick 扩展</span></a>
+        <a class="snav-item" href="#p5"><span class="snav-dot">05</span><span class="snav-lbl">键盘发音</span></a>
+        <a class="snav-item" href="#p6"><span class="snav-dot">06</span><span class="snav-lbl">空分开车 Agent</span></a>
+      </div>
+    </nav>
+
+    <!-- 01 SOP -->
+    <article class="ticket" id="p1">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">01</span>
+        <span class="kind">流程梳理</span>
+        <span class="when">2026.06 —</span>
+        <span class="stamp">已脱敏</span>
+      </div>
+      <div class="t-body">
+        <h3>出纳岗位标准作业手册（SOP）</h3>
+        <p class="t-scene">承兑汇票、电汇台账、收款入账、凭证归档、跨部门流转</p>
+
+        <div class="media sop">
+          <div class="sop-tabs" role="tablist" aria-label="SOP 章节">
+<button role="tab" aria-selected="true" data-target="s1">一、业务全景</button>
+<button role="tab" aria-selected="false" data-target="s2">二、A 模块：银行承兑汇票全流程</button>
+<button role="tab" aria-selected="false" data-target="s3">三、B 模块：电汇与资金台账</button>
+<button role="tab" aria-selected="false" data-target="s4">四、C、D、E 模块</button>
+<button role="tab" aria-selected="false" data-target="s5">五、F 模块：跨部门流转</button>
+<button role="tab" aria-selected="false" data-target="s6">六、可复用的作业原则</button>
+<button role="tab" aria-selected="false" data-target="s7">七、脱敏说明</button>
+          </div>
+          <div class="sop-body" id="sopBody" tabindex="0" aria-label="出纳岗位 SOP 全文，可滚动阅读">
+<div class="tbl"><table><thead><tr><th>项目</th><th>说明</th></tr></thead><tbody><tr><td>适用岗位</td><td>出纳（票据结算 / 资金收付 / 凭证制单）</td></tr><tr><td>覆盖范围</td><td>银行承兑汇票全流程、电汇与资金台账、销售收款入账、银行事务、凭证归档、跨部门流转</td></tr><tr><td>文档结构</td><td>每个模块统一按「触发条件 → 操作步骤 → 校验点 → 交付物」四段式组织</td></tr><tr><td>处理方式</td><td>原工作笔记 547 行 → 归并为 6 大模块、24 个作业节点；人员、账号、单位名称及内部编码已脱敏</td></tr></tbody></table></div>
+<h2 id="s1">一、业务全景</h2>
+<div class="tbl"><table><thead><tr><th>模块</th><th>触发条件</th><th>关键产出</th><th>核心风险</th></tr></thead><tbody><tr><td>A. 银行承兑汇票</td><td>每日收到承兑汇票</td><td>已配票的申请单 + 背书申请 + 票据凭证</td><td>票号错配、拆分余额账实不符</td></tr><tr><td>B. 电汇与资金台账</td><td>每日银行流水更新</td><td>昨日资金表、银行制单、付款凭证</td><td>流水漏记、收付金额不一致</td></tr><tr><td>C. 销售收款入账</td><td>开票室回款到账</td><td>收款凭证</td><td>重复入账、凭证与银行金额不符</td></tr><tr><td>D. 银行事务</td><td>回单、贴现、网银操作</td><td>回单归档、贴现落地</td><td>时效超期、跨行背书遗漏</td></tr><tr><td>E. 凭证归档</td><td>制单完成</td><td>完整凭证册</td><td>附件不全、顺序错乱</td></tr><tr><td>F. 跨部门流转</td><td>申请单送审、退款办理</td><td>签批齐全的单据</td><td>签批链缺失、单据回流</td></tr></tbody></table></div>
+<h2 id="s2">二、A 模块：银行承兑汇票全流程</h2>
+<p>票据业务是本岗最长的作业链，共 12 个节点，形成"收票 → 排序 → 配单 → 销号 → 背书 → 打印 → 换票 → 复核 → 制单 → 打印凭证 → 附凭证"的闭环。</p>
+<h3>A1 打印收款收据</h3>
+<ol><li>ERP 业务收款查询，日期取前一结算日</li><li>收款单位选本部主体与主体账户，结算方式筛"承兑"</li><li>全部显示后按付款单位排序</li><li>全选 → 打印卡片 → A5 → 单面打印</li></ol>
+<p><strong>交付物</strong>：当日承兑收款收据。</p>
+<h3>A2 打印收入汇票</h3>
+<ol><li>进入 ERP 应收票据信息，按"小额 / 大额"两档分别筛选</li><li>收票日期取前一日，周末顺延补两日</li><li>到期日期按"收票月份 +5 至 +6"区间筛选，边界精确到收票日</li><li>全选后<strong>去除前两行汇总行</strong>，打印票据正背面（A4 单面）</li></ol>
+<p><strong>不打印清单</strong>（便于后续精确配票）：</p>
+<ul><li>小额档：面额过小及带零头的票据（如 1 万出头、非整额）</li><li>大额档：超过 100 万且属优质银行的票据（不用于日常配单）</li></ul>
+<h3>A3 整理收入汇票</h3>
+<ul><li>大额：按金额从小到大</li><li>小额：按到款日期从早到晚</li></ul>
+<blockquote>排序规则不同，是为了让 A4 配票时"就近取票"——大额配大额申请单，小额配小额申请单。</blockquote>
+<h3>A4 申请单附汇票（核心判断节点）</h3>
+<p><strong>第一步：单据合法性校验</strong></p>
+<ul><li>抬头主体区分本部 / 异地基地</li><li>印章齐全</li></ul>
+<p><strong>第二步：欠款金额判断矩阵</strong></p>
+<div class="tbl"><table><thead><tr><th>场景</th><th>判断条件</th><th>是否可付</th></tr></thead><tbody><tr><td>预付款、发货款</td><td>单据完备</td><td><span class="ok">✔</span> 可直接付</td></tr><tr><td>本部 · 一般</td><td>欠款金额 &lt; 0</td><td><span class="no">✘</span></td></tr><tr><td>本部 · 一般</td><td>剩余额度 ≥ 申请金额</td><td><span class="ok">✔</span></td></tr><tr><td>本部 · 已开票</td><td>剩余 + 发票 ≥ 申请金额</td><td><span class="ok">✔</span></td></tr><tr><td>本部 · 其余</td><td>结算办理备注中有说明</td><td><span class="ok">✔</span></td></tr><tr><td>异地</td><td>欠款金额 &lt; 0</td><td><span class="no">✘</span></td></tr><tr><td>异地</td><td>欠款金额 ≥ 0</td><td><span class="ok">✔</span></td></tr></tbody></table></div>
+<blockquote>"欠款金额"为负数表示欠款，为正数表示剩余额度。</blockquote>
+<p><strong>第三步：配票策略</strong></p>
+<ol><li>按金额升序排申请单</li><li>10 万以内找小额汇票（每捆按日期堆放，一捆一日）</li><li>10 万以上找大额汇票</li><li>排除流转次数过长（&gt;11 次）及零钞票</li><li>汇票来源单位付好票的，优先回配同等好票（大银行、非偏远地区）</li><li>同金额多张可选时，优先使用流通性偏弱的票据</li><li>回形针夹附；<strong>拆分票需当场算出余额并手写标注</strong></li></ol>
+<h3>A5 备查簿汇票销号</h3>
+<ol><li>先筛"被背书人空白"且"主结算行"的记录</li><li>CTRL+F 按票据号检索</li><li>本部：已用标黑色（填被背书人 + 手写复核日期），拆分剩余标红色（插入行 + 复制粘贴）</li><li>异地：不标黑色，只标红色并用同样方式记录被背书人与日期</li><li><strong>核对黑色与红色金额之和</strong>是否等于原票面额</li></ol>
+<p><strong>易错点</strong></p>
+<ul><li>同一票号可能存在多张不同金额的票据</li><li>涂黄标记的金额 = 已在备查簿中配入申请单的票据，不可重复使用</li></ul>
+<h3>A6 电子票据背书申请</h3>
+<p><strong>异地基地</strong></p>
+<ul><li>批量收票应答（一手直收）→ 批量背书应答（多次转让）→ 下一步 → 勾选全部 → 提交公司办复核</li></ul>
+<p><strong>本部</strong></p>
+<ul><li>单张汇票直接搜票号后 9 位</li><li>多张汇票按"日期 + 金额"筛选后，按金额排序，核对票号尾号选取</li></ul>
+<p><strong>被背书人名册维护（不可省）</strong></p>
+<ul><li>按收款单位搜索</li><li>校验<strong>名称、开户行、账号三者一致</strong>，不一致不予办理</li><li>新增时选择"被背书人"，新增后需退回等待生效</li><li>技巧：先在首张票时一次性检索全部汇票，将新账户提前维护完毕</li></ul>
+<p><strong>其他规则</strong></p>
+<ul><li>背书金额 = 汇票实际使用金额；单张即为申请金额</li><li>出错走"修改删除"重做，不在原单上改</li></ul>
+<p><strong>交付物</strong>：公司办签字确认的背书申请。</p>
+<h3>A7 打印拆分汇票</h3>
+<ol><li>背书申请 / 复核结果查询</li><li>单据手写当天日期 → 下一步</li><li><strong>同步导出当日付款明细</strong>（下载全部），Excel 保留：票号、出票日、到期日、金额（文本转数值）、交易结果</li><li>反选"预处理失败"后对金额求和 —— 用于当日支出明细表与结果复核</li><li>编辑列：前两行仅保留"被背书全称"</li><li>按单位排序，结合金额选票：单张看申请单，多张看拆分汇票，<strong>逐笔确认交易结果无失败</strong></li><li>票样连续打印（正面 + 背面），双面打印一份</li></ol>
+<h3>A8 替换拆分汇票</h3>
+<ul><li>申请单分为"全整票"与"含拆分票"两类</li><li>拆分汇票对折、折角；异地基地一票两份，其中一份不折角留存</li><li>换入拆分汇票，同时给原附整票折角标记</li></ul>
+<h3>A9 结算办理复核确认</h3>
+<ol><li>筛选四类承兑 + 主体（本部 / 异地）</li><li>排序选择 → 办理 → 批量办理</li><li>办理后与银行背书结果<strong>核对金额一致</strong>（依据 A7 导出的付款明细）</li><li>复核后直接确认</li></ol>
+<h3>A10 凭证制单</h3>
+<p><strong>申请单整理</strong></p>
+<ul><li>按人名分组，再按数量拆分；专项单据单放；代采与新项目单独归类</li></ul>
+<p><strong>凭证要素</strong></p>
+<div class="tbl"><table><thead><tr><th>字段</th><th>规则</th></tr></thead><tbody><tr><td>日期</td><td>申请单公司办签字日</td></tr><tr><td>财务编号</td><td>本部按凭证列表手动续编；异地自动生成</td></tr><tr><td>摘要</td><td>"银承转让 + 对方单位（异地需后缀标识）"</td></tr><tr><td>借方金额</td><td>同单位总额不变，先清空再自动回填剩余金额</td></tr><tr><td>票据科目</td><td>应收票据贷方，按部门归属</td></tr><tr><td>现金流量</td><td>按用途映射（日常支出 / 质保金及投资 / 代采 / 主体间调拨 / 异地）</td></tr></tbody></table></div>
+<p><strong>三类特殊场景</strong></p>
+<ul><li><strong>代扣气款</strong>：申请单需标注代扣金额；借方记申请单总额，加一行挂气体购销科目贷方</li><li><strong>代扣电费</strong>：按 ÷1.13 价税分离，一行记电费收入（数量单价自动带出），一行记增值税额</li><li><strong>电汇打款</strong>：借方为申请汇款额；加一行按"打款额 × 贴现利率 ÷ 2"计提利息并计入待摊；再加一行银行存款记实付额；末行应收票据记承兑实付额</li></ul>
+<h3>A11 打印凭证</h3>
+<ul><li>ERP 凭证制单列表 → 主体 → 月份 → 凭证类型"票据" → 筛选</li><li>选中起始票打印 → 拉至末尾修改终止票号 → 直接打印</li><li>纸张 A5、横向、单面</li></ul>
+<h3>A12 申请单附凭证</h3>
+<ul><li>凭证按票号从小到大</li><li>一张凭证后按序附对应（可能多张）申请单</li></ul>
+<h2 id="s3">三、B 模块：电汇与资金台账</h2>
+<h3>B1 台账日清（每日首要动作）</h3>
+<ol><li>逐行下载昨日收支 Excel 并打印回单；有托收、付款的账户全部核查</li><li>更新"昨日表"：<ul><li>余额 → 银行昨日余额</li><li>付款 → 各行付款合计</li><li>收款 → 拆分为货款 / 水电费 / 往来（退款、煤款、社保返还、子公司款项等）</li></ul></li><li>更新"做凭证"表与"开票室"表</li><li><strong>三方交叉核对</strong>：ERP 收款单（到账日期昨日 + 结算方式电汇 + 合计扣除往来款）＝ 开票室收款合计</li><li>查收款登记：只看昨日；水电费由出纳认领，其余归开票室；发现未登记则截图通知业务员加户</li><li>打印：昨日表两份（领导 / 自留）、做凭证一份（自留）、开票室一份（排序后签字）</li></ol>
+<h3>B2 台账特殊处理</h3>
+<ul><li><strong>固定账户按月维护</strong>：公寓楼电费、园区综合办（收款 / 充值 / 办卡 / 考核）、园区装车费</li><li>每日零散入账不逐笔更新余额；有大额进出时按月初余额记账，月末汇总为一笔收款凭证</li><li>月末核对：部门专项（如电瓶车电费月末提现）、外币账户</li></ul>
+<h3>B3 销售收款入账与收款凭证</h3>
+<ol><li>排除项：煤款、托收、货损等往来款不计入开票室货款</li><li>查发银行收票记录，按时间排序确认是否已发，避免重复</li><li>业务中台 → 合同收款单 → 销售收款；筛选结算方式 + 昨日日期 + 收款账号</li><li><strong>每张凭证总额须与昨日收款表对应银行收款额一致</strong></li><li>填写部门归属（按银行账户对应销售条线）</li><li>外币：先录外币金额再改币种；到账额、手续费（插入分录）、原始汇入额三行分离；同一公司多条凭证分开生成</li></ol>
+<h3>B4 银行转账制单</h3>
+<ol><li>先核对申请单可付性（欠款为负不可付）</li><li><strong>限额分笔</strong>：超过单笔限额（如 300 万、500 万）必须拆笔，否则超额无法落地</li><li>他行按 4 位尾号检索</li><li>新户维护：ERP 结算处复制户名与行号 → 制单页模糊查开户行全称 → 取行号回制单页 → 保存为常用收款账户</li><li>制单完成后在申请单上回写付款银行尾号</li></ol>
+<h3>B5 付款结算</h3>
+<ul><li>部分付款：单选 → 办理 → 填付款账号并修改实际付款金额 → 保存提交</li><li>已有付款账号的单据按实际付款账号修正</li><li>扣除利息的付款按实付金额结算</li><li>流程：办理 <span class="ok">✔</span> → 复核 <span class="ok">✔</span></li></ul>
+<h3>B6 生成付款凭证</h3>
+<div class="tbl"><table><thead><tr><th>汇款事由</th><th>科目性质</th><th>现金流量类别</th></tr></thead><tbody><tr><td>往来款：调本部</td><td>银行存款</td><td>内部往来</td></tr><tr><td>往来款：调异地</td><td>内部往来</td><td>主体间调拨</td></tr><tr><td>退货款</td><td>应收账款</td><td>销售退回</td></tr><tr><td>社保、福利</td><td>应付职工薪酬</td><td>职工支出</td></tr><tr><td>车船保险、机票</td><td>应付职工薪酬</td><td>差旅交通</td></tr><tr><td>同楼层分摊、食堂采购、公寓楼电费</td><td>费用 / 其他应付</td><td>日常经营</td></tr></tbody></table></div>
+<p><strong>报销凭证</strong>（按借方科目拆分）：</p>
+<div class="tbl"><table><thead><tr><th>科目性质</th><th>金额取值</th></tr></thead><tbody><tr><td>管理费用</td><td>最后倒挤差额</td></tr><tr><td>进项税 - 旅客运输</td><td>铁路电子客票 ÷ 1.09 × 0.09</td></tr><tr><td>进项税 - 其他</td><td>增值税专用发票税额</td></tr><tr><td>银行存款（贷方）</td><td>报销单总金额</td></tr></tbody></table></div>
+<p><strong>冲账</strong>：外部单位先挂应付，取得发票后转费用科目。</p>
+<h2 id="s4">四、C、D、E 模块</h2>
+<h3>C 银行回单与流水</h3>
+<ul><li><strong>批量回单下载</strong>：账户查询 → 电子回单查询 → 查询类型批量 → 起止日期月初至月末 → 打印状态"未打印" → 交易方向"贷" → PDF 合并下载</li><li><strong>收入下载</strong>：票据业务 → 电商汇票 → 查询</li></ul>
+<h3>D 贴现业务</h3>
+<ul><li>按票据金额与到期日筛选拟贴现票据</li><li>利率区分电费票与市场报价，按当期报价取值</li><li>贴给非开票行需另做背书申请</li><li>各行网银操作路径不同（商业汇票背书签收、在线秒贴、出票经办、银承申请书维护），需分别建立操作卡片</li><li>保证金与利息结构：收方含保证金、利息及结构性存款收益；付方含贴现利息与手续费</li></ul>
+<h3>E 凭证附回单规范</h3>
+<div class="tbl"><table><thead><tr><th>凭证类型</th><th>附件构成</th></tr></thead><tbody><tr><td>收款</td><td>凭证 + 贷方回单（外币另加汇款通知书）</td></tr><tr><td>付款（一般）</td><td>凭证 + 签字申请单 + 借方回单（申请单只需一次签字）</td></tr><tr><td>付款（报销）</td><td>凭证 + 报销单 + 借方回单（报销单无需二次签字）</td></tr></tbody></table></div>
+<p><strong>收款凭证排序技巧</strong>：ERP 凭证联查预览 → 定位应收账款行 → 辅助导入导出 → Excel 仅保留往来单位列 → 分列去数字只留名称，避免跨日期凭证乱序。</p>
+<h2 id="s5">五、F 模块：跨部门流转</h2>
+<h3>F1 申请单领取与送审</h3>
+<ol><li>一楼公司办按文件盒（本部 / 异地）依人名查找，分日期签字</li><li>核对单位、金额、方式（承兑 / 电汇），两者分开放置</li><li><strong>铅笔先写草稿</strong>，减少涂改：合计金额、其中承兑、其中电汇</li><li>拍照报送：按项目组归类 → 今日合计 → 承兑小计 → 电汇小计</li><li>上午送领导审批，下午跟进结果；获批后向公司办领取对应银行复核盘</li></ol>
+<h3>F2 退款可付性判断</h3>
+<ol><li>科目余额表按月查询（跨度一年）→ 应收账款 → 无级次</li><li>右键新窗口打开单位余额表 → 输入往来单位 → 单位三栏账</li><li>有往来（收入）记录：看凭证编号<ul><li>有电汇记录且金额大于退款申请额 → 可走电汇</li><li>仅有承兑票据，或电汇金额小于退款申请额 → 不走电汇</li></ul></li><li>无往来记录：回到第一步扩大查询跨度</li></ol>
+<h3>F3 退宿退款（多部门串联示例）</h3>
+<p>行李核查（人力资源确认时限）→ 开票室缴费 → 物业单据 → 押金收据缺失时从科目余额表调取辅助三栏账并复印凭证 → 开具两张领款单（金额大小写、领款人签字）→ 财务负责人签字 → 人力资源签字 → 公司办签字盖章 → 开票室取款。</p>
+<h2 id="s6">六、可复用的作业原则</h2>
+<p>从上述流程中提炼的六条通用规则，也是本手册的方法论内核：</p>
+<ol><li><strong>三方一致原则</strong> — 申请单、票据、凭证三处金额必须互相对得上；银行流水与台账、开票室总额每日交叉核对一次。</li><li><strong>编号唯一可追溯</strong> — 票号取后 9 位、凭证号连续编排、付款银行尾号回写单据，任一凭据都能反查到源头。</li><li><strong>分色标记法</strong> — 黑色=已全额使用，红色=拆分剩余，黄色=已配入申请单；颜色替代记忆，避免重复占用。</li><li><strong>日清月结</strong> — 每日固定完成流水更新与三方核对；零散入账不逐笔动余额，月末一次性合并。</li><li><strong>前置校验优于事后纠错</strong> — 可付性判断、限额分笔、名称/行号/账号三一致校验，都放在动作发生之前。</li><li><strong>异常清单化</strong> — 不打印清单、不接收清单、易错点清单固化在流程里，把个人经验转成可交接的规则。</li></ol>
+<h2 id="s7">七、脱敏说明</h2>
+<p>本手册由个人工作笔记整理而成，对外展示前已完成以下处理：</p>
+<div class="tbl"><table><thead><tr><th>处理项</th><th>处理方式</th></tr></thead><tbody><tr><td>网银登录与支付凭证</td><td>整节删除，不予保留任何形式的记录</td></tr><tr><td>银行账户</td><td>仅保留业务逻辑，具体行别与账号尾号隐去</td></tr><tr><td>人员姓名</td><td>替换为岗位角色</td></tr><tr><td>客户、供应商、关联单位</td><td>以"对方单位""优质单位"等代称表示</td></tr><tr><td>内部科目编号与部门编码</td><td>以科目性质与部门名称替代</td></tr><tr><td>金额门槛与利率</td><td>保留结构性阈值，具体报价、单价隐去</td></tr><tr><td>系统截图与外链</td><td>移除</td></tr><tr><td>与主线无关的个人事务</td><td>删减</td></tr></tbody></table></div>
+<blockquote>保留的是流程骨架与判断逻辑，去掉的是可识别信息与可执行的操作凭证。</blockquote>
+<p><em>本手册可继续按以下方向扩展：作业节点清单化（Checklist）、异常案例库、新人上手培训路径、关键节点双人复核责任制。</em></p>
+          </div>
+        </div>
+
+        <dl class="facts">
+          <div><dt>问题</dt><dd>岗位经验散在 547 行个人笔记和口头传授里，新人要跟岗很久才能独立配票、销号、制单。</dd></div>
+          <div><dt>做法</dt><dd>按「触发条件 → 操作步骤 → 校验点 → 交付物」重组为 <strong>6 大模块、24 个作业节点</strong>，提炼 6 条通用作业原则。</dd></div>
+          <div><dt>产品视角</dt><dd>后面的 PDF 工具和回单排序工具，需求都来自这份 SOP 里的排序、打印和核对节点。</dd></div>
+        </dl>
+        <div class="t-foot">
+          <div class="tags"><span class="tag">流程梳理</span><span class="tag">风险控制点</span><span class="tag">知识沉淀</span><span class="tag">脱敏</span></div>
+          <span class="note">人员、账号、单位、科目编码已脱敏，网银操作凭证整节删除</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 PDF 工具 -->
+    <article class="ticket" id="p2">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">02</span>
+        <span class="kind">在线工具</span>
+        <span class="when">2026.07 —</span>
+        <span class="stamp">已上线</span>
+      </div>
+      <div class="t-body">
+        <h3>票据 PDF 处理工具集</h3>
+        <p class="t-scene">银行承兑汇票打印前的插页与排序</p>
+
+        <div class="media video-wrap">
+          <video controls preload="metadata" playsinline aria-label="票据 PDF 处理工具演示视频">
+            <source src="videos/PDFtool.mp4" type="video/mp4">
+            当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
+          </video>
+        </div>
+
+        <dl class="facts">
+          <div><dt>问题</dt><dd>每批几十张汇票要手工按金额或到期日排序；连续票据双面打印会串页，只能逐张处理。</dd></div>
+          <div><dt>方案</dt><dd>拆成插页打印、到期日排序、金额排序 3 个工具和 1 个入口页。PDF <strong>全程在浏览器本地处理</strong>，不上传服务器。</dd></div>
+          <div><dt>结果</dt><dd>本人和同事日常使用。每 50 张票据，排序约省 <strong>5 分钟</strong>，插页约省 <strong>10 分钟</strong>。</dd></div>
+        </dl>
+
+        <div class="log">
+          <h4>迭代记录</h4>
+          <ul>
+            <li><b>打印机跳过空白插页：</b>在插页角落加不影响阅读的浅灰标记，打印机恢复正常出纸。</li>
+            <li><b>防漏票：</b>识别子票据号和子票区间；识别不到的汇票标黄，页面顶部汇总缺号数量。</li>
+            <li><b>加载提速：</b>三个工具共用一份 PDF 解析组件，压缩后传输从约 390 KB 降到 151 KB，切换工具不再重复下载。</li>
+            <li><b>稳定性：</b>页面重排改为直接改写 PDF 页序表，出错自动回退旧方案；修复金额跨列错配、票据错行匹配；到期日按业务要求改为降序。</li>
+            <li><b>兼容与部署：</b>适配电脑浏览器和微信内置浏览器；定位并修复 EdgeOne 上 PDF 解析组件加载失败。</li>
+            <li><b>质量：</b>6 项核心逻辑自动化测试，CI 先测试后构建。</li>
+          </ul>
+        </div>
+
+        <div class="t-foot">
+          <div class="tags"><span class="tag">Vite</span><span class="tag">pdf.js</span><span class="tag">本地处理</span><span class="tag">EdgeOne Pages</span><span class="tag">GitHub Actions</span></div>
+          <div class="links">
+            <a class="live" href="https://hy.gtlish.com/" target="_blank" rel="noopener">在线使用 hy.gtlish.com</a>
+            <a href="https://github.com/GTlilith/pdf-tools" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 03 回单排序 -->
+    <article class="ticket" id="p3">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">03</span>
+        <span class="kind">本地工具</span>
+        <span class="when">2026.09 —</span>
+        <span class="stamp">日常使用</span>
+      </div>
+      <div class="t-body">
+        <h3>银行电子回单排序工具</h3>
+        <p class="t-scene">按 Excel 名单顺序，自动重排批量下载的电子回单</p>
+
+        <div class="media flow" aria-label="回单排序流程示意">
+          <div class="box">
+            <h5>输入</h5>
+            <ul>
+              <li><span class="chip-page">PDF</span>多份银行电子回单</li>
+              <li><span class="chip-page">XLSX</span>一份排序名单</li>
+              <li><span class="chip-page">设置</span>付款人 / 收款人全称</li>
+            </ul>
+          </div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="box">
+            <h5>处理（本机）</h5>
+            <ul>
+              <li>提取每页「全称」字段</li>
+              <li>按名单顺序合并排序</li>
+              <li>同名页面保持原顺序</li>
+            </ul>
+          </div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="box">
+            <h5>输出</h5>
+            <ul>
+              <li><span class="chip-page warn">置顶</span>未匹配页面及原因</li>
+              <li><span class="chip-page">PDF</span>排序后的回单</li>
+              <li><span class="chip-page">CSV</span>逐页来源核对明细</li>
+            </ul>
+          </div>
+        </div>
+
+        <dl class="facts">
+          <div><dt>问题</dt><dd>月末批量下载的回单页序混乱，要对着 Excel 名单逐页查找、核对、调整顺序。</dd></div>
+          <div><dt>方案</dt><dd>按全称匹配排序，<strong>识别不了的页放最前面</strong>集中核对；每页记录来源文件、原页码和新页码，可追溯。</dd></div>
+          <div><dt>边界</dt><dd>只监听本机地址，回单不出电脑。按完整名称匹配，不做模糊匹配。扫描件需先 OCR，新银行版式首次使用要核对。</dd></div>
+        </dl>
+
+        <div class="log">
+          <h4>测试覆盖</h4>
+          <ul>
+            <li>输出页面的文字、尺寸和渲染图像与原页一致。</li>
+            <li>多文件合并后的全局顺序、未匹配置顶、同名顺序保留。</li>
+            <li>损坏或加密文件、下载改名、取消保存时不写入文件。</li>
+          </ul>
+        </div>
+
+        <div class="t-foot">
+          <div class="tags"><span class="tag">Python</span><span class="tag">Flask</span><span class="tag">PyMuPDF</span><span class="tag">openpyxl</span></div>
+          <span class="note">处理的是真实回单，不提供公开演示</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 04 AutoClick -->
+    <article class="ticket" id="p4">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">04</span>
+        <span class="kind">浏览器扩展</span>
+        <span class="when">2026.07 —</span>
+        <span class="stamp">已发布</span>
+      </div>
+      <div class="t-body">
+        <h3>AutoClick 自动点击扩展</h3>
+        <p class="t-scene">网页上需要反复点同一个按钮的场景</p>
+
+        <div class="media video-wrap">
+          <video controls preload="metadata" playsinline aria-label="AutoClick 自动点击扩展演示视频">
+            <source src="videos/autoclick.mp4" type="video/mp4">
+            当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
+          </video>
+        </div>
+
+        <dl class="facts">
+          <div><dt>问题</dt><dd>常见自动点击工具常驻所有网页，权限大；点击后页面一刷新，任务就断了。</dd></div>
+          <div><dt>方案</dt><dd><strong>点工具栏图标才启用</strong>，只申请 3 项权限。框选目标后按固定或随机间隔点击，支持多层同源 iframe。</dd></div>
+          <div><dt>关键体验</dt><dd>页面整页刷新后，自动恢复运行状态、方案、倒计时和点击次数。</dd></div>
+        </dl>
+
+        <div class="log">
+          <h4>最近一次迭代（本地已完成，待发布）</h4>
+          <ul>
+            <li><b>暂停 / 继续 / 结束：</b>暂停保留剩余倒计时；结束后刷新页面不会被自动拉起。</li>
+            <li><b>缩小面板可操作：</b>修复标题栏拖动吞掉按钮点击的问题。</li>
+            <li><b>运行时间跳秒：</b>原因是显示刷新正好落在秒边界前，刷新改为每 100ms 一次，点击间隔不受影响。</li>
+            <li><b>方案管理：</b>新方案先存草稿，间隔和随机设置随方案一起保存。</li>
+            <li><b>验证：</b>在真实 Edge 环境跑 6 组自动化脚本，共 116 项检查全部通过。</li>
+          </ul>
+        </div>
+
+        <div class="t-foot">
+          <div class="tags"><span class="tag">Manifest V3</span><span class="tag">chrome.storage</span><span class="tag">GitHub Pages</span></div>
+          <div class="links">
+            <a class="live" href="https://gtlilith.github.io/autoclick/" target="_blank" rel="noopener">安装页面</a>
+            <a href="https://github.com/GTlilith/autoclick" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- 05 键盘发音 -->
+    <article class="ticket" id="p5">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">05</span>
+        <span class="kind">桌面软件</span>
+        <span class="when">Windows</span>
+        <span class="stamp">离线可用</span>
+      </div>
+      <div class="t-body">
+        <h3>键盘发音 · 数字录入语音反馈</h3>
+        <p class="t-scene">财务人员习惯计算器按键报数，电脑小键盘录入没有声音</p>
+
+        <div class="media video-wrap">
+          <video controls preload="metadata" playsinline aria-label="键盘数字发音软件演示视频">
+            <source src="videos/keyboardsound.mp4" type="video/mp4">
+            当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
+          </video>
+        </div>
+
+        <dl class="facts">
+          <div><dt>功能</dt><dd>按小键盘 0–9、小数点和退格时，播放计算器风格的中文报数；托盘常驻，小窗显示按键。</dd></div>
+          <div><dt>迭代</dt><dd>音色试了三轮：系统 TTS 不像计算器，第二版偏童音，最后定为<strong>语速加快、音调压低的中音女声</strong>。</dd></div>
+          <div><dt>分发</dt><dd>语音预先生成为本地音频，运行不联网；整个文件夹拷给同事，双击启动脚本即可使用。</dd></div>
+        </dl>
+        <div class="t-foot">
+          <div class="tags"><span class="tag">Electron</span><span class="tag">全局键盘监听</span><span class="tag">Edge TTS</span></div>
+          <span class="note">桌面软件，以视频演示为准</span>
+        </div>
+      </div>
+    </article>
+
+    <!-- 06 Agent -->
+    <article class="ticket" id="p6">
+      <div class="stub">
+        <span class="no">No.</span><span class="num">06</span>
+        <span class="kind">AI Agent</span>
+        <span class="when">2026.06 —</span>
+        <span class="stamp">学习项目</span>
+      </div>
+      <div class="t-body">
+        <h3>空分开车智能领航员 Agent</h3>
+        <p class="t-scene">带中控操作人员按步骤开车，异常时提示历史事故教训</p>
+
+        <div class="media video-wrap">
+          <video controls preload="metadata" playsinline aria-label="空分开车智能领航员演示视频">
+            <source src="videos/KFagent.mp4" type="video/mp4">
+            当前浏览器不支持 MP4 视频，请使用新版 Edge、Chrome 或 Safari 浏览器。
+          </video>
+        </div>
+
+        <dl class="facts">
+          <div><dt>问题</dt><dd>开车环节多，新人频繁查规程、问老员工；异常处置经验散在事故复盘和个人记忆里。</dd></div>
+          <div><dt>知识库</dt><dd>把脱敏资料整理成 <strong>6 大步骤、26 项卡点</strong>的开车 SOP 库和 <strong>32 张</strong>事故处置卡片。</dd></div>
+          <div><dt>核心决策</dt><dd>步骤推进由代码状态机判断，<strong>必须逐项确认卡点，模型无权越过</strong>；反馈有异常先阻断，再匹配事故卡片。</dd></div>
+        </dl>
+
+        <div class="log">
+          <h4>两个阶段</h4>
+          <ul>
+            <li><b>Coze RAG 原型：</b>用角色约束、结构化输出和引用要求控制回答；调整查询改写、混合检索和结果重排，改善口语化提问的召回。</li>
+            <li><b>代码化重构：</b>安全相关的步骤推进不能交给模型自由生成，改为 TypeScript 状态机强约束，零运行时依赖。</li>
+            <li><b>能力边界：</b>知识库外的问题直接拒答并引导查正式规程；拒绝一切屏蔽、短接、绕过联锁的请求。</li>
+            <li><b>测试：</b>11 项自动化测试覆盖卡点推进、异常阻断、安全规则和库外拒答，全部通过。</li>
+          </ul>
+        </div>
+
+        <div class="t-foot">
+          <div class="tags"><span class="tag">Coze</span><span class="tag">RAG</span><span class="tag">TypeScript</span><span class="tag">状态机</span><span class="tag">AI 安全边界</span></div>
+          <span class="note">脱敏资料做概念验证，不用于真实生产</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</main>
+
+<!-- ================= 经历 ================= -->
+<section class="sec" id="cv" style="border-top:1px solid var(--rule)">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker">经历</p>
+      <h2>工厂现场和财务一线，都待过</h2>
+    </div>
+    <div class="cv">
+      <ol class="timeline">
+        <li class="now">
+          <span class="d">2026.06 — 至今</span>
+          <h3>化工集团财务处 · 开票、银行承兑岗</h3>
+          <p>在 ERP 中完成开票、票据登记、背书申请、备查簿销号和凭证生成。把承兑流程梳理成 SOP，并做出票据 PDF 工具和回单排序工具。</p>
+        </li>
+        <li>
+          <span class="d">2026.01 — 2026.05</span>
+          <h3>化工集团空分车间 · 中控室操作员</h3>
+          <p>学习空分工艺和 DCS 监控逻辑，与班组、设备人员配合处理现场异常。空分开车 Agent 的需求来自这段经历。</p>
+        </li>
+        <li>
+          <span class="d">2024.07 — 2025.12</span>
+          <h3>升学备考与职业方向探索</h3>
+        </li>
+        <li>
+          <span class="d">2020.09 — 2024.06</span>
+          <h3>合肥工业大学 · 信息管理与信息系统（A+ 学科）</h3>
+          <p>毕业设计「糖尿病患者自我管理系统」：完成用例图、业务流程图、E-R 图和数据字典；首版只做患者端，先验证核心记录流程。</p>
+        </li>
+      </ol>
+
+      <div class="skills">
+        <dl>
+          <div><dt>产品设计</dt><dd>需求分析、功能拆解、业务流程设计、原型、基础 PRD</dd></div>
+          <div><dt>AI 应用</dt><dd>Coze 工作流、RAG 知识库、Prompt 设计、AI 辅助编程；了解幻觉、召回和人工兜底</dd></div>
+          <div><dt>落地工具</dt><dd>Git / GitHub、EdgeOne Pages、GitHub Pages、ProcessOn、墨刀、Office</dd></div>
+          <div><dt>技术基础</dt><dd>Python、SQL 入门；能读懂并验收 AI 生成的代码</dd></div>
+          <div><dt>语言</dt><dd>CET-6</dd></div>
+        </dl>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ================= 联系 ================= -->
 <section class="contact" id="contact">
-  <div class="contact-inner">
-    <h2>联系我</h2>
-    <p>正在寻找 AI 应用产品经理 / B 端工具产品经理机会。<br>欢迎交流业务场景里的 AI 落地。</p>
+  <div class="wrap sec">
+    <div>
+      <h2>正在找 <span class="mk">AI 应用 / B 端工具</span>产品经理机会</h2>
+      <p>欢迎聊业务场景里的 AI 落地。点击邮箱即可复制。</p>
+    </div>
     <div class="contact-row">
-      <button class="btn btn-primary copy-email" type="button" data-email="gtl111222@126.com" aria-label="复制邮箱地址">gtl111222@126.com</button>
-      <a class="btn btn-ghost" href="https://github.com/GTlilith" target="_blank" rel="noopener">GitHub / GTlilith</a>
-      <!-- TODO: 准备好脱敏简历后取消注释：
-      <a class="btn btn-ghost" href="resume.pdf" download>下载简历 PDF</a>
-      -->
+      <button class="btn btn-solid copy-email" type="button" data-email="gtl111222@126.com" aria-label="复制邮箱地址">gtl111222@126.com</button>
+      <a class="btn btn-line" href="https://github.com/GTlilith" target="_blank" rel="noopener">GitHub / GTlilith</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="rule"></div>
-  © 2026 gtlish.com · Built with AI assistance, product decisions by human. · <a href="#top">回到顶部 ↑</a>
+  <div class="wrap">
+    <span>© 2026 gtlish.com · 代码由 AI 辅助完成，产品决策和验收由我负责</span>
+    <a href="#top">回到顶部 ↑</a>
+  </div>
 </footer>
 
-<!-- 左侧目录轴脚本 -->
 <script>
+// 复制邮箱
 (function(){
-  var copyButton = document.querySelector('.copy-email');
-  if(copyButton){
-    copyButton.addEventListener('click', function(){
-      var email = copyButton.getAttribute('data-email');
-      var originalText = copyButton.textContent;
-      var showCopied = function(){
-        copyButton.textContent = '已复制邮箱';
-        copyButton.classList.add('is-copied');
-        window.setTimeout(function(){
-          copyButton.textContent = originalText;
-          copyButton.classList.remove('is-copied');
+  var buttons = document.querySelectorAll('.copy-email');
+  Array.prototype.forEach.call(buttons, function(btn){
+    btn.addEventListener('click', function(){
+      var email = btn.getAttribute('data-email');
+      if(btn.dataset.busy) return;
+      var original = btn.textContent;
+      var done = function(){
+        btn.dataset.busy = '1';
+        btn.textContent = '已复制邮箱';
+        btn.classList.add('is-copied');
+        setTimeout(function(){
+          btn.textContent = original;
+          btn.classList.remove('is-copied');
+          delete btn.dataset.busy;
         }, 1600);
       };
+      var fallback = function(){
+        var t = document.createElement('textarea');
+        t.value = email; t.setAttribute('readonly','');
+        t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.select();
+        try{ if(document.execCommand('copy')) done(); }
+        finally{ document.body.removeChild(t); }
+      };
       if(navigator.clipboard && window.isSecureContext){
-        navigator.clipboard.writeText(email).then(showCopied);
+        navigator.clipboard.writeText(email).then(done, fallback);
       }else{
-        var input = document.createElement('textarea');
-        input.value = email;
-        input.setAttribute('readonly', '');
-        input.style.position = 'fixed';
-        input.style.opacity = '0';
-        document.body.appendChild(input);
-        input.select();
-        try{
-          if(document.execCommand('copy')) showCopied();
-        }finally{
-          document.body.removeChild(input);
-        }
+        fallback();
       }
     });
-  }
+  });
 })();
 
+// SOP 章节切换
+(function(){
+  var body = document.getElementById('sopBody');
+  if(!body) return;
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.sop-tabs button'));
+  var heads = tabs.map(function(b){ return document.getElementById(b.getAttribute('data-target')); });
+  tabs.forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var h = heads[i];
+      if(h) body.scrollTo({top: h.offsetTop - 8, behavior: 'smooth'});
+    });
+  });
+  var mark = function(){
+    var y = body.scrollTop + 40, idx = 0;
+    heads.forEach(function(h, i){ if(h && h.offsetTop <= y) idx = i; });
+    tabs.forEach(function(b, i){
+      b.classList.toggle('on', i === idx);
+      b.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+  };
+  body.addEventListener('scroll', mark, {passive:true});
+  mark();
+})();
+
+// 左侧目录轴
 (function(){
   var nav = document.getElementById('sideNav');
-  if(!nav) return;
-  var items = Array.from(nav.querySelectorAll('.snav-item'));
-  var ids = ['cp01','cp02','cp03','cp04','cp05'];
-  var sections = ids.map(function(id){ return document.getElementById(id); });
-  var trackEl = document.getElementById('track');
-
-  // 进入 track 区域时显示导航轴
-  if(trackEl && 'IntersectionObserver' in window){
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        nav.classList.toggle('snav-show', e.isIntersecting);
-      });
-    },{threshold:0.04}).observe(trackEl);
-  }
-
-  // 跟踪当前可见 section
-  if('IntersectionObserver' in window){
-    var secObs = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          var idx = sections.indexOf(e.target);
-          if(idx !== -1){
-            items.forEach(function(it,i){
-              it.classList.toggle('snav-active', i === idx);
-            });
-          }
-        }
-      });
-    },{
-      threshold: 0,
-      rootMargin: '-15% 0px -55% 0px'
+  if(!nav || !('IntersectionObserver' in window)) return;
+  var items = Array.prototype.slice.call(nav.querySelectorAll('.snav-item'));
+  var sections = items.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
+  var works = document.getElementById('works');
+  new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ nav.classList.toggle('snav-show', e.isIntersecting); });
+  }, {threshold:0.02}).observe(works);
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var idx = sections.indexOf(e.target);
+      items.forEach(function(it, i){ it.classList.toggle('snav-active', i === idx); });
     });
-    sections.forEach(function(s){ if(s) secObs.observe(s); });
-  }
+  }, {threshold:0, rootMargin:'-35% 0px -60% 0px'});
+  sections.forEach(function(s){ if(s) obs.observe(s); });
 })();
 </script>
-
 </body>
 </html>
