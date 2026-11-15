@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GTlish · 把财务一线的痛点做成能用的工具 | AI 应用产品作品集</title>
-<meta name="description" content="财务票据岗出身的 AI 应用产品实践者。出纳 SOP、票据 PDF 工具、银行回单排序、浏览器扩展、桌面软件、空分开车 Agent，六个作品都来自真实工作场景。">
+<meta name="description" content="财务出纳出身的 AI 应用产品实践者。出纳 SOP、票据 PDF 工具、银行回单排序、浏览器扩展、桌面软件、空分开车 Agent，六个作品都来自我自己遇到的实际问题。">
 <meta name="theme-color" content="#F7F8FB">
 <style>
 :root{
@@ -351,9 +351,9 @@ footer a{color:var(--muted)}
   <div class="wrap">
     <div>
       <p class="kicker">AI 应用产品 · 作品集</p>
-      <h1>把财务一线的痛点，<br>做成<span class="mk">每天都在用的工具</span></h1>
+      <h1>把财务一线的痛点，<br>做成<span class="mk">自己每天在用的工具</span></h1>
       <p class="lead">
-        我做过化工集团财务处的开票与银行承兑岗，也在空分车间中控室值过班。
+        我在化工集团财务处做出纳，负责银行承兑与电汇收付两条线，也在空分车间中控室值过班。
         这里的六个作品，需求都来自我亲手做过的工作：我负责定义问题、设计方案、测试和上线，代码借助 AI 编程工具完成。
       </p>
       <div class="hero-actions">
@@ -369,8 +369,8 @@ footer a{color:var(--muted)}
       </div>
       <dl class="v-rows">
         <div class="v-row"><dt>教育</dt><dd>合肥工业大学（211）· 信息管理与信息系统本科</dd></div>
-        <div class="v-row"><dt>经历</dt><dd>财务处开票 / 银行承兑岗<br>空分车间中控室操作员</dd></div>
-        <div class="v-row"><dt>作品</dt><dd>6 个：2 个在线可用，3 个本地工具，1 份脱敏 SOP</dd></div>
+        <div class="v-row"><dt>经历</dt><dd>财务处出纳（银行承兑 / 电汇）<br>空分车间中控室操作员</dd></div>
+        <div class="v-row"><dt>作品</dt><dd>6 个：2 个在线可用，2 个本地工具，1 个 Agent 原型，1 份脱敏 SOP</dd></div>
         <div class="v-row"><dt>擅长</dt><dd>业务流程梳理、需求拆解、AI 辅助开发、测试与部署</dd></div>
         <div class="v-row"><dt>求职</dt><dd>AI 应用产品经理 / B 端工具产品经理</dd></div>
       </dl>
@@ -392,7 +392,7 @@ footer a{color:var(--muted)}
       <div class="step"><span class="n">STEP 2</span><h3>写清流程</h3><p>先把岗位流程写成 SOP，标出校验点和风险点，工具需求从这里来。</p></div>
       <div class="step"><span class="n">STEP 3</span><h3>拆成小工具</h3><p>一个场景一个工具，先定边界：数据不出本机、识别不到就标出来。</p></div>
       <div class="step"><span class="n">STEP 4</span><h3>AI 辅助实现</h3><p>用 AI 编程工具写代码，我负责方案取舍、验收和自动化测试用例。</p></div>
-      <div class="step"><span class="n">STEP 5</span><h3>上线后迭代</h3><p>放到真实工作里用，按同事反馈和打印、浏览器等实际问题继续修。</p></div>
+      <div class="step"><span class="n">STEP 5</span><h3>上线后迭代</h3><p>放到真实工作里用，按自己在打印、浏览器、系统兼容上遇到的问题继续修。</p></div>
     </div>
   </div>
 </section>
@@ -570,7 +570,7 @@ footer a{color:var(--muted)}
         <dl class="facts">
           <div><dt>问题</dt><dd>每批几十张汇票要手工按金额或到期日排序；连续票据双面打印会串页，只能逐张处理。</dd></div>
           <div><dt>方案</dt><dd>拆成插页打印、到期日排序、金额排序 3 个工具和 1 个入口页。PDF <strong>全程在浏览器本地处理</strong>，不上传服务器。</dd></div>
-          <div><dt>结果</dt><dd>本人和同事日常使用。每 50 张票据，排序约省 <strong>5 分钟</strong>，插页约省 <strong>10 分钟</strong>。</dd></div>
+          <div><dt>结果</dt><dd>本人在当前岗位日常使用。每 50 张票据，排序约省 <strong>5 分钟</strong>，插页约省 <strong>10 分钟</strong>。</dd></div>
         </dl>
 
         <div class="log">
@@ -726,7 +726,7 @@ footer a{color:var(--muted)}
         <dl class="facts">
           <div><dt>功能</dt><dd>按小键盘 0–9、小数点和退格时，播放计算器风格的中文报数；托盘常驻，小窗显示按键。</dd></div>
           <div><dt>迭代</dt><dd>音色试了三轮：系统 TTS 不像计算器，第二版偏童音，最后定为<strong>语速加快、音调压低的中音女声</strong>。</dd></div>
-          <div><dt>分发</dt><dd>语音预先生成为本地音频，运行不联网；整个文件夹拷给同事，双击启动脚本即可使用。</dd></div>
+          <div><dt>分发</dt><dd>语音预先生成为本地音频，运行不联网；以文件夹形式分发，双击启动脚本即可使用。</dd></div>
         </dl>
         <div class="t-foot">
           <div class="tags"><span class="tag">Electron</span><span class="tag">全局键盘监听</span><span class="tag">Edge TTS</span></div>
@@ -789,9 +789,14 @@ footer a{color:var(--muted)}
     <div class="cv">
       <ol class="timeline">
         <li class="now">
-          <span class="d">2026.06 — 至今</span>
-          <h3>化工集团财务处 · 开票、银行承兑岗</h3>
-          <p>在 ERP 中完成开票、票据登记、背书申请、备查簿销号和凭证生成。把承兑流程梳理成 SOP，并做出票据 PDF 工具和回单排序工具。</p>
+          <span class="d">2026.07 — 至今</span>
+          <h3>化工集团财务处 · 出纳室（银行承兑 / 电汇）</h3>
+          <p>承兑这条线做申请单可付性判断与配票、备查簿销号与拆分登记、电子票据背书、结算复核、凭证制单与归档；9 月起接手电汇付款，做制单与结算、资金台账三方核对、付款凭证和当日付款汇总。把两条线的流程整理成 SOP，并做出票据 PDF 工具和回单排序工具。</p>
+        </li>
+        <li>
+          <span class="d">2026.06 — 2026.07</span>
+          <h3>化工集团财务处 · 开票室</h3>
+          <p>做销售收款登记与开票相关工作，了解货款从银行到账、开票室登记到 ERP 收款单之间的流转。</p>
         </li>
         <li>
           <span class="d">2026.01 — 2026.05</span>
