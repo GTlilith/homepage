@@ -202,10 +202,9 @@ a:hover{text-decoration:underline;text-underline-offset:3px}
 
 /* SOP 阅读器 */
 .sop{border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:var(--sheet)}
-.sop-tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px;background:var(--paper);border-bottom:1px solid var(--rule);scrollbar-width:none}
-.sop-tabs::-webkit-scrollbar{display:none}
+.sop-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;background:var(--paper);border-bottom:1px solid var(--rule)}
 .sop-tabs button{
-  flex:none;font:500 13px/1.3 var(--sans);color:var(--body);
+  flex:0 1 auto;min-width:0;max-width:100%;white-space:normal;text-align:left;font:500 13px/1.3 var(--sans);color:var(--body);
   background:transparent;border:1px solid transparent;border-radius:999px;padding:6px 12px;cursor:pointer;
 }
 .sop-tabs button:hover{border-color:var(--rule);background:var(--sheet)}
